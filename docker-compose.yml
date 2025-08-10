@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - teach_sphere_data:/var/lib/mysql
+
+  redis:
+    image: redis:7
+    restart: always
+    ports:
+      - "6379:6379"
+
+  #app:
+  #  build: .
+  #  restart: always
+  #  ports:
+  #    - "${SERVER_PORT}:${SERVER_PORT}"
+  #  environment:
+  #    SERVER_PORT: ${SERVER_PORT}
+  #    DB_URL: jdbc:mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db:3306/${MYSQL_DATABASE}
+  #    EMAIL: ${EMAIL}
+  #    EMAIL_PASSWORD: ${EMAIL_PASSWORD}
+  #    CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME}
+  #    CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY}
+  #    CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET}
+  #  depends_on:
+  #    - db
+  #    - redis
+
+volumes:
+  teach_sphere_data:

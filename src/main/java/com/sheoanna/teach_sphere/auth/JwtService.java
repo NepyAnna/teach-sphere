@@ -15,7 +15,6 @@ import java.util.Date;
 
 @Service
 public class JwtService {
-
     private static final long ACCESS_TOKEN_TTL = 5 * 60 * 1000;
     private static final long REFRESH_TOKEN_TTL = 7 * 24 * 3600 * 1000;
     @Value("${rsaPrivateKey}")
@@ -96,6 +95,7 @@ public class JwtService {
     public boolean validateToken(String jwtToken) {
         return extractExpiration(jwtToken).after(new Date());
     }
+
     private Date currentDate() {
         return new Date();
     }

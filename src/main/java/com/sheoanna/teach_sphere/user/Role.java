@@ -1,5 +1,4 @@
 package com.sheoanna.teach_sphere.user;
-
 import java.util.Set;
 
 public enum Role {

@@ -12,8 +12,20 @@ public class RedisService {
         this.redisTemplate = redisTemplate;
     }
 
+    public void saveToken(String token) {
+        long ttl = 7;
+        TimeUnit timeUnit = TimeUnit.DAYS;
+
+        setTokenWithTTL(token, "valid", ttl, timeUnit);
+    }
+
     public void setTokenWithTTL(String key, String value, long ttl, TimeUnit timeUnit) {
         redisTemplate.opsForValue().set(key, value, ttl, timeUnit);
+    }
+
+    public boolean isBlacklisted(String token) {
+        String status = redisTemplate.opsForValue().get(token);
+        return "blacklisted".equals(status);
     }
 
     public boolean hasToken(String token) {

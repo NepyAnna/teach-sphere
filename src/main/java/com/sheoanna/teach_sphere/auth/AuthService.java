@@ -4,8 +4,8 @@ import com.sheoanna.teach_sphere.auth.dtos.AuthRequest;
 import com.sheoanna.teach_sphere.auth.dtos.AuthResponse;
 import com.sheoanna.teach_sphere.auth.dtos.RegisterRequest;
 import com.sheoanna.teach_sphere.auth.dtos.RegisterResponse;
+import com.sheoanna.teach_sphere.auth.exceptions.RefreshTokenCookiesNotFoundException;
 import com.sheoanna.teach_sphere.redis.RedisService;
-import com.sheoanna.teach_sphere.security.CustomUserDetailsService;
 import com.sheoanna.teach_sphere.user.Role;
 import com.sheoanna.teach_sphere.user.User;
 import com.sheoanna.teach_sphere.user.UserRepository;
@@ -32,50 +32,13 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public AuthResponse authenticate(AuthRequest loginDto, HttpServletResponse response) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.username(), loginDto.password()));
-
-        User user = userRepository.findByUsername(loginDto.username())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-        String jwtToken = jwtService.generateJwtToken(user.getUsername());
-        String refreshToken = jwtService.generateRefreshToken(user.getUsername());
-        Cookie refreshTokenCookie = getRefreshTokenCookie(refreshToken);
-        response.addCookie(refreshTokenCookie);
-
-        return new AuthResponse(user.getId(), user.getUsername(), jwtToken, user.getRoles());
-    }
-
-    public String refreshToken(HttpServletRequest request, HttpServletResponse response) {
-        var refreshTokenCookie = Arrays.stream(request.getCookies())
-                .filter(cookie -> cookie.getName().equals("refresh_token")).findFirst().orElseThrow();
-        var currentRefreshToken = refreshTokenCookie.getValue();
-
-        if (redisService.hasToken(currentRefreshToken))
-            return null;
-
-        invalidateToken(currentRefreshToken);
-
-        if (currentRefreshToken != null) {
-            if (jwtService.validateToken(currentRefreshToken)) {
-                var username = jwtService.extractSubject(currentRefreshToken);
-                String jwtToken = jwtService.generateJwtToken(username);
-                String newRefreshToken = jwtService.generateRefreshToken(username);
-                refreshTokenCookie = getRefreshTokenCookie(newRefreshToken);
-                response.addCookie(refreshTokenCookie);
-                return jwtToken;
-            }
-        }
-        return null;
-    }
-
     public RegisterResponse register(RegisterRequest registerDto) {
         if (!Role.allAllowed(registerDto.roles())) {
             throw new IllegalArgumentException("Invalid role for registration");
         }
-
         User user = User.builder()
                 .username(registerDto.username())
+                .email(registerDto.email())
                 .password(passwordEncoder.encode(registerDto.password()))
                 .roles(registerDto.roles())
                 .build();
@@ -85,15 +48,66 @@ public class AuthService {
         return new RegisterResponse(user.getId(), user.getUsername(), user.getRoles());
     }
 
+    public AuthResponse authenticate(AuthRequest loginDto, HttpServletResponse response) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.username(), loginDto.password()));
+
+        User user = userRepository.findByUsername(loginDto.username())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        String jwtToken = jwtService.generateJwtToken(user.getUsername());
+        String refreshToken = jwtService.generateRefreshToken(user.getUsername());
+
+        redisService.saveToken(refreshToken);
+
+        Cookie refreshTokenCookie = getRefreshTokenCookie(refreshToken);
+        response.addCookie(refreshTokenCookie);
+
+        return new AuthResponse(user.getId(), user.getUsername(), jwtToken, user.getRoles());
+    }
+
+    public String refreshToken(HttpServletRequest request, HttpServletResponse response) {
+        validateCookies(request);
+        Cookie refreshTokenCookie = Arrays.stream(request.getCookies())
+                .filter(cookie -> "refresh_token".equals(cookie.getName()))
+                .findFirst()
+                .orElseThrow(RefreshTokenCookiesNotFoundException::new);
+        String currentRefreshToken = refreshTokenCookie.getValue();
+
+        if (redisService.isBlacklisted(currentRefreshToken)) {
+            throw new RuntimeException("Refresh token is blacklisted");
+        }
+        if (!jwtService.validateToken(currentRefreshToken)) {
+            invalidateToken(currentRefreshToken);
+            throw new RuntimeException("Refresh token is not valid");
+        }
+        String username = jwtService.extractSubject(currentRefreshToken);
+        String newJwtToken = jwtService.generateJwtToken(username);
+        String newRefreshToken = jwtService.generateRefreshToken(username);
+
+        invalidateToken(currentRefreshToken);
+        redisService.saveToken(newRefreshToken);
+
+        Cookie newRefreshCookie = getRefreshTokenCookie(newRefreshToken);
+        response.addCookie(newRefreshCookie);
+
+        return newJwtToken;
+    }
+
     public void logout(HttpServletRequest request, HttpServletResponse response) {
-        var refreshTokenCookie = Arrays.stream(request.getCookies())
-                .filter(cookie -> cookie.getName().equals("refresh_token")).findFirst().orElseThrow();
-        var token = request.getHeader("Authorization").substring(7);
+        validateCookies(request);
+        Cookie refreshTokenCookie = Arrays.stream(request.getCookies())
+                .filter(cookie -> "refresh_token".equals(cookie.getName()))
+                .findFirst()
+                .orElseThrow(RefreshTokenCookiesNotFoundException::new);
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new RuntimeException("Invalid Authorization header");
+        }
+        String accessToken = authHeader.substring(7);
 
-        log.info("Token value from request: {}", token);
+        log.info("Token value from request: {}", accessToken);
 
-        invalidateToken(token);
         invalidateToken(refreshTokenCookie.getValue());
+        invalidateToken(accessToken);
         invalidateRefreshTokenCookie(response, refreshTokenCookie);
     }
 
@@ -109,12 +123,11 @@ public class AuthService {
     }
 
     private Cookie getRefreshTokenCookie(String token) {
-        var cookieMaxAge = (int) (jwtService.extractExpiration(token).getTime() - System.currentTimeMillis()) / 1000;
+        long expirationMillis = jwtService.extractExpiration(token).getTime();
+        long remainingSeconds = (expirationMillis - System.currentTimeMillis()) / 1000;
+        int cookieMaxAge = remainingSeconds > 0 ? (int) remainingSeconds : 0;
 
-        if (cookieMaxAge < 0)
-            cookieMaxAge = 0;
-
-        Cookie refreshTokenCookie = new Cookie("refresh_token", (String) token);
+        Cookie refreshTokenCookie = new Cookie("refresh_token", token);
         refreshTokenCookie.setHttpOnly(true);
         refreshTokenCookie.setPath("/");
         refreshTokenCookie.setMaxAge(cookieMaxAge);
@@ -126,5 +139,11 @@ public class AuthService {
         refreshTokenCookie.setMaxAge(0);
         refreshTokenCookie.setPath("/");
         response.addCookie(refreshTokenCookie);
+    }
+
+    private void validateCookies(HttpServletRequest request) {
+        if (request.getCookies() == null) {
+            throw new RuntimeException("No cookies present");
+        }
     }
 }

@@ -118,7 +118,7 @@ public class AuthService {
 
         if (expirationTimeInMilliseconds > 0L) {
             log.info("New Access Token Generated Successfully, Invalidating Previous Refresh token");
-            redisService.setTokenWithTTL(token, "blacklisted", expirationTimeInMilliseconds, TimeUnit.MILLISECONDS);
+            redisService.setTokenWithTTL("blacklisted:" + token, "blacklisted", expirationTimeInMilliseconds, TimeUnit.MILLISECONDS);
         }
     }
 

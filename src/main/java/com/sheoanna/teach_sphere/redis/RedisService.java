@@ -16,7 +16,7 @@ public class RedisService {
         long ttl = 7;
         TimeUnit timeUnit = TimeUnit.DAYS;
 
-        setTokenWithTTL(token, "valid", ttl, timeUnit);
+        setTokenWithTTL("valid:" + token, "valid", ttl, timeUnit);
     }
 
     public void setTokenWithTTL(String key, String value, long ttl, TimeUnit timeUnit) {

@@ -12,13 +12,6 @@ public class RedisService {
         this.redisTemplate = redisTemplate;
     }
 
-    public void saveToken(String token) {
-        long ttl = 7;
-        TimeUnit timeUnit = TimeUnit.DAYS;
-
-        setTokenWithTTL("valid:" + token, "valid", ttl, timeUnit);
-    }
-
     public void setTokenWithTTL(String key, String value, long ttl, TimeUnit timeUnit) {
         redisTemplate.opsForValue().set(key, value, ttl, timeUnit);
     }

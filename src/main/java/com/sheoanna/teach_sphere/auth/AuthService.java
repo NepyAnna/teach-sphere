@@ -55,9 +55,6 @@ public class AuthService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         String jwtToken = jwtService.generateJwtToken(user.getUsername());
         String refreshToken = jwtService.generateRefreshToken(user.getUsername());
-
-        redisService.saveToken(refreshToken);
-
         Cookie refreshTokenCookie = getRefreshTokenCookie(refreshToken);
         response.addCookie(refreshTokenCookie);
 
@@ -82,10 +79,7 @@ public class AuthService {
         String username = jwtService.extractSubject(currentRefreshToken);
         String newJwtToken = jwtService.generateJwtToken(username);
         String newRefreshToken = jwtService.generateRefreshToken(username);
-
         invalidateToken(currentRefreshToken);
-        redisService.saveToken(newRefreshToken);
-
         Cookie newRefreshCookie = getRefreshTokenCookie(newRefreshToken);
         response.addCookie(newRefreshCookie);
 

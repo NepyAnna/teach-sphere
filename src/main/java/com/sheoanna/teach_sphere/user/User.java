@@ -2,6 +2,7 @@ package com.sheoanna.teach_sphere.user;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.context.annotation.Profile;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,6 +34,6 @@ public class User {
     @Column(name="role")
     private Set<Role> roles = new HashSet<>();
 
-/*    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private UserProfile profile;*/
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Profile profile;
 }

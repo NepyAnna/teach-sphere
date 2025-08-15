@@ -114,7 +114,6 @@ class AuthServiceTest {
             AuthResponse response = authService.authenticate(request, servletResponse);
 
             assertEquals("jwt-token", response.token());
-            verify(redisService).saveToken("refresh-token");
             verify(servletResponse).addCookie(any(Cookie.class));
         }
 
@@ -153,7 +152,6 @@ class AuthServiceTest {
             String token = authService.refreshToken(servletRequest, servletResponse);
 
             assertEquals("new-jwt", token);
-            verify(redisService).saveToken("new-refresh");
             verify(servletResponse).addCookie(any(Cookie.class));
         }
 

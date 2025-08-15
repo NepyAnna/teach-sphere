@@ -9,7 +9,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import java.util.concurrent.TimeUnit;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -26,14 +25,6 @@ class RedisServiceTest {
     void setUp() {
         redisService = new RedisService(redisTemplate);
         lenient().when(redisTemplate.opsForValue()).thenReturn(valueOperations);
-    }
-
-    @Test
-    void saveTokenTest_shouldCallSetWithTTL() {
-        String token = "some-token";
-        redisService.saveToken(token);
-        verify(valueOperations)
-                .set(eq("valid:" + token), eq("valid"), eq(7L), eq(TimeUnit.DAYS));
     }
 
     @Test

@@ -24,7 +24,7 @@ public class TokenBlacklistFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
         String token = request.getHeader("Authorization");
-        if (token != null && redisService.hasToken(token.substring(7))) {
+        if (token != null && redisService.isBlacklisted("blacklisted:" + token.substring(7))) {
             logger.info("Token has been blacklisted.");
             response.getWriter().write("Token is blacklisted");
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token is blacklisted");

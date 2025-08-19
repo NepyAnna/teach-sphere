@@ -24,17 +24,28 @@ public class ProfileController {
             @RequestParam(defaultValue = "4") int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        return profileService.findAll(pageable);
+        return profileService.findAllProfiles(pageable);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProfileResponse> show(@PathVariable Long id) {
-        return ResponseEntity.ok(profileService.findById(id));
+    public ResponseEntity<ProfileResponse> showProfileById(@PathVariable Long id) {
+        return ResponseEntity.ok(profileService.findProfileById(id));
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ProfileResponse> createProfile(@ModelAttribute ProfileRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(profileService.store(request));
+                .body(profileService.saveProfile(request));
+    }
+
+    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ProfileResponse> updateProfile(@ModelAttribute ProfileRequest request) {
+        return ResponseEntity.ok(profileService.updateProfile(request));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProfileById(@PathVariable Long id) {
+        profileService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }

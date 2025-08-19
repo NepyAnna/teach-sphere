@@ -26,12 +26,12 @@ public class ProfileService {
     private final CloudinaryService cloudinaryService;
     private  final UserService userService;
 
-    public Page<ProfileResponse> findAll(Pageable pageable) {
+    public Page<ProfileResponse> findAllProfiles(Pageable pageable) {
         return profileRepository.findAll(pageable)
                 .map(profileMapper::toResponse);
     }
 
-    public ProfileResponse findById(Long id) {
+    public ProfileResponse findProfileById(Long id) {
         Profile profile = profileRepository.findById(id)
                 .orElseThrow(() -> new ProfileNotFoundException(id));
 
@@ -42,19 +42,55 @@ public class ProfileService {
     }
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
-    public ProfileResponse store(ProfileRequest newProfileData) {
+    public ProfileResponse saveProfile(ProfileRequest newProfileData) {
         User user = userService.getAuthenticatedUser();
 
         if (profileRepository.findByUserId(user.getId()).isPresent()) {
-            throw new ProfileAlreadyExistsException(
-                    "Profile with user_id: " + user.getId() + " already exists!");
+            throw new ProfileAlreadyExistsException(user.getId());
         }
         Profile profile = profileMapper.toEntity(newProfileData);
         profile.setUser(user);
 
         handlePhotoUpload(newProfileData, profile);
-        //Profile savedProfile = profileRepository.save(profile);
         return profileMapper.toResponse(profileRepository.save(profile));
+    }
+
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public ProfileResponse updateProfile(ProfileRequest newProfileData) {
+        User user = userService.getAuthenticatedUser();
+        Profile profile = profileRepository.findByUserId(user.getId())
+                .orElseThrow(() -> new ProfileNotFoundException("Profile for user ID " + user.getId() + " not found"));
+
+        MultipartFile image = newProfileData.avatar();
+        if (image != null && !image.isEmpty()) {
+            if (profile.getAvatarPublicId() != null) {
+                cloudinaryService.delete(profile.getAvatarPublicId());
+            }
+            UploadResult result = cloudinaryService.upload(image, "profiles");
+            profile.setAvatarUrl(result.url());
+            profile.setAvatarPublicId(result.publicId());
+        }
+        profileRepository.save(profile);
+        return profileMapper.toResponse(profile);
+    }
+
+    @Transactional
+    public void deleteById(Long id) {
+        Profile profile = profileRepository.findById(id)
+                .orElseThrow(() -> new ProfileNotFoundException(id));
+
+        if (!userService.hasAccessToProfile(profile)) {
+            throw new AccessDeniedException("You are not allowed to access this profile.");
+        }
+        User user = profile.getUser();
+
+        if (user != null) {
+            user.setProfile(null);
+        }
+        if (profile.getAvatarPublicId() != null) {
+            cloudinaryService.delete(profile.getAvatarPublicId());
+        }
+        profileRepository.deleteById(id);
     }
 
     private void handlePhotoUpload(ProfileRequest newProfileData, Profile profile) {

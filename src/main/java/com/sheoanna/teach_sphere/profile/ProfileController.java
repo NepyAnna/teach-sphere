@@ -1,6 +1,5 @@
-package com.sheoanna.teach_sphere.profile.exceptions;
+package com.sheoanna.teach_sphere.profile;
 
-import com.sheoanna.teach_sphere.profile.ProfileService;
 import com.sheoanna.teach_sphere.profile.dtos.ProfileRequest;
 import com.sheoanna.teach_sphere.profile.dtos.ProfileResponse;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/profiles")
 @RequiredArgsConstructor
 public class ProfileController {
-    private  final ProfileService profileService;
+    private final ProfileService profileService;
 
     @GetMapping("")
     public Page<ProfileResponse> showAllProfiles(

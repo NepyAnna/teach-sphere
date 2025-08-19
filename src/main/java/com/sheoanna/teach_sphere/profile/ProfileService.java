@@ -24,7 +24,7 @@ public class ProfileService {
     private final ProfileRepository profileRepository;
     private final ProfileMapper profileMapper;
     private final CloudinaryService cloudinaryService;
-    private  final UserService userService;
+    private final UserService userService;
 
     public Page<ProfileResponse> findAllProfiles(Pageable pageable) {
         return profileRepository.findAll(pageable)

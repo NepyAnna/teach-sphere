@@ -2,6 +2,7 @@ package com.sheoanna.teach_sphere.category;
 
 import com.sheoanna.teach_sphere.category.dtos.CategoryMapper;
 import com.sheoanna.teach_sphere.category.dtos.CategoryResponse;
+import com.sheoanna.teach_sphere.category.exceptions.CategoryNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,5 +17,11 @@ public class CategoryService {
     public Page<CategoryResponse> findAllCategories(Pageable pageable){
         return categoryRepository.findAll(pageable)
                 .map(categoryMapper::toResponse);
+    }
+
+    public CategoryResponse findCategoryById(Long id) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new CategoryNotFoundException(id));
+        return categoryMapper.toResponse(category);
     }
 }

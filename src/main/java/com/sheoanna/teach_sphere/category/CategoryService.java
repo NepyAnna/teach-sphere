@@ -47,4 +47,11 @@ public class CategoryService {
         return categoryMapper.toResponse(existCategory);
     }
 
+    public void deleteCategory(Long id) {
+        if(categoryRepository.findById(id).isEmpty()) {
+            throw new CategoryNotFoundException(id);
+        }
+        categoryRepository.deleteById(id);
+    }
+
 }

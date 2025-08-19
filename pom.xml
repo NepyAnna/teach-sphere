@@ -177,6 +177,12 @@
 			<version>2.2.2</version> <!-- або актуальну версію -->
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>42.7.3</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

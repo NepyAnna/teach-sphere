@@ -25,6 +25,10 @@ public class Profile {
     @Column(name = "location", length = 50)
     private String location;
 
+
+    @Column(name = "photo_public_id")
+    private String avatarPublicId;
+
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;

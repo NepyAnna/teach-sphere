@@ -1,6 +1,9 @@
 package com.sheoanna.teach_sphere.global;
 
 import com.sheoanna.teach_sphere.auth.exceptions.RefreshTokenCookiesNotFoundException;
+import com.sheoanna.teach_sphere.category.exceptions.CategoryNotFoundException;
+import com.sheoanna.teach_sphere.profile.exceptions.ProfileAlreadyExistsException;
+import com.sheoanna.teach_sphere.profile.exceptions.ProfileNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -32,12 +35,27 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<String> handleBadCredentials(BadCredentialsException ex) {
+    public ResponseEntity<String> handleBadCredentialsException(BadCredentialsException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
-    public ResponseEntity<String> handleUserNotFound(UsernameNotFoundException ex) {
+    public ResponseEntity<String> handleUserNotFoundException(UsernameNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(ProfileNotFoundException.class)
+    public ResponseEntity<String> handleProfileNotFoundException(ProfileNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(ProfileAlreadyExistsException.class)
+    public ResponseEntity<String> handleProfileAlreadyExistsException(ProfileAlreadyExistsException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<String> handleCategoryNotFoundException(CategoryNotFoundException ex){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 }

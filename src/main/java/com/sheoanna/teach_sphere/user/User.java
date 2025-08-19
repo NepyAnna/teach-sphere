@@ -1,8 +1,9 @@
 package com.sheoanna.teach_sphere.user;
 
+import com.sheoanna.teach_sphere.profile.Profile;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.context.annotation.Profile;
+
 import java.util.HashSet;
 import java.util.Set;
 

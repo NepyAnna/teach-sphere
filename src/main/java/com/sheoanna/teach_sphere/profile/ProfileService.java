@@ -42,7 +42,7 @@ public class ProfileService {
     }
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
-    public ProfileResponse saveProfile(ProfileRequest newProfileData) {
+    public ProfileResponse createProfile(ProfileRequest newProfileData) {
         User user = userService.getAuthenticatedUser();
 
         if (profileRepository.findByUserId(user.getId()).isPresent()) {

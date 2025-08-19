@@ -34,7 +34,7 @@ public class ProfileController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ProfileResponse> createProfile(@ModelAttribute ProfileRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(profileService.saveProfile(request));
+                .body(profileService.createProfile(request));
     }
 
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

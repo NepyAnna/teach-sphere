@@ -34,4 +34,16 @@ public class SubjectController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(subjectService.createSubject(request));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<SubjectResponse> updateSubject(@PathVariable Long id, @RequestBody SubjectRequest request) {
+        return ResponseEntity.ok()
+                .body(subjectService.updateSubject(id, request));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteSubject(@PathVariable Long id) {
+        subjectService.deleteSubject(id);
+        return ResponseEntity.noContent().build();
+    }
 }

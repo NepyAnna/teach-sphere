@@ -21,13 +21,13 @@ public class SubjectService {
     private final SubjectMapper subjectMapper;
     private final CategoryService categoryService;
 
-    public Page<SubjectResponse> findAllSubjects(Pageable pageable){
+    public Page<SubjectResponse> findAllSubjects(Pageable pageable) {
         return subjectRepository.findAll(pageable).map(subjectMapper::toResponse);
     }
 
-    public SubjectResponseWithMentorSub findSubjectById(Long id){
+    public SubjectResponseWithMentorSub findSubjectById(Long id) {
         Subject existSubject = subjectRepository.findById(id)
-                .orElseThrow(()-> new SubjectNotFoundException(id));
+                .orElseThrow(() -> new SubjectNotFoundException(id));
 
         return subjectMapper.toResponseWithMentorSub(existSubject);
     }
@@ -36,14 +36,39 @@ public class SubjectService {
     public SubjectResponse createSubject(SubjectRequest request) {
         Category existCategory = categoryService.findExistCategory(request.categoryId());
 
-        if(subjectRepository.findByName(request.name())) {
-            throw new SubjectByNameAlreadyExistsException(request.name());
-        }
+        checkIfSubjectExist(request.name());
 
         Subject savedSubject = subjectRepository.save(Subject.builder()
                 .name(request.name())
                 .category(existCategory).build());
 
         return subjectMapper.toResponse(savedSubject);
+    }
+
+    @Transactional
+    public SubjectResponse updateSubject(Long id, SubjectRequest request) {
+        Subject existSubject = subjectRepository.findById(id)
+                .orElseThrow(() -> new SubjectNotFoundException(id));
+        Category existCategory = categoryService.findExistCategory(request.categoryId());
+
+        checkIfSubjectExist(request.name());
+
+        existSubject.setName(request.name());
+        existSubject.setCategory(existCategory);
+
+        return  subjectMapper.toResponse(existSubject);
+    }
+
+    public  void deleteSubject(Long id) {
+        if(subjectRepository.findById(id).isEmpty()) {
+            throw new SubjectNotFoundException(id);
+        }
+        subjectRepository.deleteById(id);
+    }
+
+    private void checkIfSubjectExist(String name) {
+        if (subjectRepository.existsByName(name)) {
+            throw new SubjectByNameAlreadyExistsException(name);
+        }
     }
 }

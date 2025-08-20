@@ -6,5 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface SubjectRepository extends JpaRepository<Subject, Long> {
-    Boolean findByName(@NotBlank(message = "Subject name is required") String name);
+    boolean existsByName(String name);
+
+    Optional<Subject> findByName(@NotBlank(message = "Subject name is required") String name);
 }

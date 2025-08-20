@@ -1,5 +1,4 @@
 package com.sheoanna.teach_sphere.subject.dtos;
-
 import com.sheoanna.teach_sphere.subject.Subject;
 import org.springframework.stereotype.Component;
 
@@ -9,6 +8,12 @@ public class SubjectMapper {
         return new SubjectResponse(subject.getId(),
                 subject.getName(),
                 subject.getCategory().getName());
+    }
+
+    public SubjectResponseWithMentorSub toResponseWithMentorSub(Subject subject) {
+        return new SubjectResponseWithMentorSub(subject.getId(),
+                subject.getName(),
+                subject.getMentorSubjects());
     }
 
     public Subject toEntity(SubjectRequest request) {

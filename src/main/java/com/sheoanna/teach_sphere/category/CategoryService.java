@@ -39,7 +39,7 @@ public class CategoryService {
     }
 
     @Transactional
-    public CategoryResponse updateCategory(CategoryRequest request, Long id){
+    public CategoryResponse updateCategory(Long id, CategoryRequest request){
         Category existCategory = categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException(id));
 

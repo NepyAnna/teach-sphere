@@ -4,7 +4,7 @@ import com.sheoanna.teach_sphere.auth.exceptions.RefreshTokenCookiesNotFoundExce
 import com.sheoanna.teach_sphere.category.exceptions.CategoryNotFoundException;
 import com.sheoanna.teach_sphere.profile.exceptions.ProfileAlreadyExistsException;
 import com.sheoanna.teach_sphere.profile.exceptions.ProfileNotFoundException;
-import com.sheoanna.teach_sphere.subject.exceptions.SubjectNotFoundByIDException;
+import com.sheoanna.teach_sphere.subject.exceptions.SubjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -60,8 +60,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
-    @ExceptionHandler(SubjectNotFoundByIDException.class)
-    public ResponseEntity<String> handleSubjectNotFoundByIDException(SubjectNotFoundByIDException ex){
+    @ExceptionHandler(SubjectNotFoundException.class)
+    public ResponseEntity<String> handleSubjectNotFoundByIDException(SubjectNotFoundException ex){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 }

@@ -23,9 +23,8 @@ public class CategoryService {
     }
 
     public CategoryResponse findCategoryById(Long id) {
-        Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new CategoryNotFoundException(id));
-        return categoryMapper.toResponse(category);
+        Category existCategory = findExistCategory(id);
+        return categoryMapper.toResponse(existCategory);
     }
 
     @Transactional
@@ -52,5 +51,10 @@ public class CategoryService {
             throw new CategoryNotFoundException(id);
         }
         categoryRepository.deleteById(id);
+    }
+
+    public Category findExistCategory(Long id) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new CategoryNotFoundException(id));
     }
 }

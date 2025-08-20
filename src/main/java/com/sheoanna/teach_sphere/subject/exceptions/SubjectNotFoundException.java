@@ -2,12 +2,12 @@ package com.sheoanna.teach_sphere.subject.exceptions;
 
 import com.sheoanna.teach_sphere.global.AppException;
 
-public class SubjectNotFoundByIDException extends AppException {
-    public SubjectNotFoundByIDException(String message) {
+public class SubjectNotFoundException extends AppException {
+    public SubjectNotFoundException(String message) {
         super(message);
     }
 
-    public SubjectNotFoundByIDException(Long id) {
+    public SubjectNotFoundException(Long id) {
         super("Subject with ID " + id + " not found");
     }
 }

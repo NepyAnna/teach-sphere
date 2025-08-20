@@ -1,10 +1,13 @@
 package com.sheoanna.teach_sphere.user;
 
+import com.sheoanna.teach_sphere.mentor_subject.MentorSubject;
 import com.sheoanna.teach_sphere.profile.Profile;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -35,6 +38,15 @@ public class User {
     @Column(name="role")
     private Set<Role> roles = new HashSet<>();
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Profile profile;
+
+    @OneToMany(mappedBy = "mentor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MentorSubject> mentorSubjects = new ArrayList<>();
+
+/*    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StudentInterest> studentInterests = new ArrayList<>();
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SessionRequest> sentRequests = new ArrayList<>();*/
 }

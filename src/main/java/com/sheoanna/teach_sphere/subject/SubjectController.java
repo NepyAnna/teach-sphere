@@ -19,15 +19,15 @@ public class SubjectController {
 
     @GetMapping("")
     public Page<SubjectResponse> findAllSubjects(@RequestParam(defaultValue = "0") int page,
-                                                 @RequestParam(defaultValue = "4") int size){
+                                                 @RequestParam(defaultValue = "4") int size) {
         Pageable pageable = PageRequest.of(page, size);
         return subjectService.findAllSubjects(pageable);
     }
 
-    @GetMapping("/{id}")
+/*    @GetMapping("/{id}")
     public ResponseEntity<SubjectResponseWithMentorSub> findSubjectById(@PathVariable Long id) {
         return ResponseEntity.ok().body(subjectService.findSubjectById(id));
-    }
+    }*/
 
     @PostMapping("")
     public ResponseEntity<SubjectResponse> createSubject(@RequestBody SubjectRequest request) {

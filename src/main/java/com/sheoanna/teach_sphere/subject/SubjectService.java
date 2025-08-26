@@ -5,7 +5,6 @@ import com.sheoanna.teach_sphere.category.CategoryService;
 import com.sheoanna.teach_sphere.subject.dtos.SubjectMapper;
 import com.sheoanna.teach_sphere.subject.dtos.SubjectRequest;
 import com.sheoanna.teach_sphere.subject.dtos.SubjectResponse;
-import com.sheoanna.teach_sphere.subject.dtos.SubjectResponseWithMentorSub;
 import com.sheoanna.teach_sphere.subject.exceptions.SubjectByNameAlreadyExistsException;
 import com.sheoanna.teach_sphere.subject.exceptions.SubjectNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -25,12 +24,12 @@ public class SubjectService {
         return subjectRepository.findAll(pageable).map(subjectMapper::toResponse);
     }
 
-    public SubjectResponseWithMentorSub findSubjectById(Long id) {
+/*    public SubjectResponseWithMentorSub findSubjectById(Long id) {
         Subject existSubject = subjectRepository.findById(id)
                 .orElseThrow(() -> new SubjectNotFoundException(id));
 
         return subjectMapper.toResponseWithMentorSub(existSubject);
-    }
+    }*/
 
     @Transactional
     public SubjectResponse createSubject(SubjectRequest request) {

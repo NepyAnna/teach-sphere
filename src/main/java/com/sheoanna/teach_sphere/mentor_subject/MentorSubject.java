@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name="mentor_subjects")
@@ -21,10 +23,12 @@ public class MentorSubject {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User mentor;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subject_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Subject subject;
 
 /*    @OneToMany(mappedBy = "mentorSubject", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -4,6 +4,8 @@ import com.sheoanna.teach_sphere.mentor_subject.MentorSubject;
 import com.sheoanna.teach_sphere.profile.Profile;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -38,10 +40,11 @@ public class User {
     @Column(name="role")
     private Set<Role> roles = new HashSet<>();
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "user")
     private Profile profile;
 
-    @OneToMany(mappedBy = "mentor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "mentor")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<MentorSubject> mentorSubjects = new ArrayList<>();
 
 /*    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)

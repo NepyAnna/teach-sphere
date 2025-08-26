@@ -86,7 +86,7 @@ class ProfileControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "testuser", roles = {"USER"})
+    //@WithMockUser(username = "testuser", roles = {"USER"})
     void testGetProfileById() throws Exception {
         Long profileId = user.getProfile().getId();
 
@@ -96,7 +96,7 @@ class ProfileControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "testuser", roles = {"USER"})
+    //@WithMockUser(username = "testuser", roles = {"USER"})
     void testDeleteProfile() throws Exception {
         Long profileId = user.getProfile().getId();
 

@@ -3,6 +3,9 @@ package com.sheoanna.teach_sphere.category;
 import com.sheoanna.teach_sphere.subject.Subject;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,12 +17,13 @@ import java.util.Set;
 @Builder
 public class Category {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name="name", nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "category")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Subject> subjects = new HashSet<>();
 }

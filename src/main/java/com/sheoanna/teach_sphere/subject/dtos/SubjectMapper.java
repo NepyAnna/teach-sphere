@@ -10,12 +10,6 @@ public class SubjectMapper {
                 subject.getCategory().getName());
     }
 
-/*    public SubjectResponseWithMentorSub toResponseWithMentorSub(Subject subject) {
-        return new SubjectResponseWithMentorSub(subject.getId(),
-                subject.getName(),
-                subject.getMentorSubjects().);
-    }*/
-
     public Subject toEntity(SubjectRequest request) {
         return Subject.builder()
                 .name(request.name())

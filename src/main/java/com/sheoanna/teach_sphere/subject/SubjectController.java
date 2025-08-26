@@ -24,10 +24,10 @@ public class SubjectController {
         return subjectService.findAllSubjects(pageable);
     }
 
-/*    @GetMapping("/{id}")
-    public ResponseEntity<SubjectResponseWithMentorSub> findSubjectById(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<SubjectResponse> findSubjectById(@PathVariable Long id) {
         return ResponseEntity.ok().body(subjectService.findSubjectById(id));
-    }*/
+    }
 
     @PostMapping("")
     public ResponseEntity<SubjectResponse> createSubject(@RequestBody SubjectRequest request) {

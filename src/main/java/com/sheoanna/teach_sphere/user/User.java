@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -47,9 +46,6 @@ public class User {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<MentorSubject> mentorSubjects = new ArrayList<>();
 
-/*    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StudentInterest> studentInterests = new ArrayList<>();
-
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+/* @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SessionRequest> sentRequests = new ArrayList<>();*/
 }

@@ -24,12 +24,12 @@ public class SubjectService {
         return subjectRepository.findAll(pageable).map(subjectMapper::toResponse);
     }
 
-/*    public SubjectResponseWithMentorSub findSubjectById(Long id) {
+    public SubjectResponse findSubjectById(Long id) {
         Subject existSubject = subjectRepository.findById(id)
                 .orElseThrow(() -> new SubjectNotFoundException(id));
 
-        return subjectMapper.toResponseWithMentorSub(existSubject);
-    }*/
+        return subjectMapper.toResponse(existSubject);
+    }
 
     @Transactional
     public SubjectResponse createSubject(SubjectRequest request) {
@@ -48,9 +48,8 @@ public class SubjectService {
     public SubjectResponse updateSubject(Long id, SubjectRequest request) {
         Subject existSubject = subjectRepository.findById(id)
                 .orElseThrow(() -> new SubjectNotFoundException(id));
-        Category existCategory = categoryService.findExistCategory(request.categoryId());
 
-        checkIfSubjectExist(request.name());
+        Category existCategory = categoryService.findExistCategory(request.categoryId());
 
         existSubject.setName(request.name());
         existSubject.setCategory(existCategory);

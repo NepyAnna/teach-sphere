@@ -35,7 +35,4 @@ public class Subject {
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<MentorSubject> mentorSubjects = new ArrayList<>();
-
-/*    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StudentInterest> studentInterests = new ArrayList<>();*/
 }

@@ -51,15 +51,21 @@ class CategoryControllerTest {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    private Category testCategory;
+    private CategoryRequest request;
+
     @BeforeEach
     void cleanDb() {
         categoryRepository.deleteAll();
+        testCategory = Category.builder()
+                .name("Test Category")
+                .build();
+        request = new CategoryRequest("New Category");
     }
 
     @Test
     @WithMockUser(username = "testuser", roles = {"STUDENT"})
     void findAllCategories_ReturnsPage() throws Exception {
-        Category testCategory= Category.builder().name("Test Category").build();
         categoryRepository.save(testCategory);
 
         mockMvc.perform(get("/api/categories"))
@@ -70,7 +76,6 @@ class CategoryControllerTest {
     @Test
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     void createCategory_AsAdmin_ReturnsCreated() throws Exception {
-        CategoryRequest request = new CategoryRequest("New Category");
         mockMvc.perform(post("/api/categories")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -80,7 +85,6 @@ class CategoryControllerTest {
     @Test
     @WithMockUser(username = "student", roles = {"STUDENT"})
     void createCategory_AsStudent_Forbidden() throws Exception {
-        CategoryRequest request = new CategoryRequest("New Category");
         mockMvc.perform(post("/api/categories")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -90,9 +94,7 @@ class CategoryControllerTest {
     @Test
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     void updateCategory_AsAdmin_Successfully() throws Exception {
-        Category category = Category.builder().name("Old Name").build();
-        category = categoryRepository.save(category);
-
+        Category category = categoryRepository.save(testCategory);
         CategoryRequest updateRequest = new CategoryRequest("Updated Name");
 
         mockMvc.perform(put("/api/categories/{id}", category.getId())
@@ -135,8 +137,7 @@ class CategoryControllerTest {
     @Test
     @WithMockUser(username = "user", roles = {"STUDENT"})
     void deleteCategory_AsStudent_Forbidden() throws Exception {
-        Category category = Category.builder().name("To Delete").build();
-        category = categoryRepository.save(category);
+        Category category = categoryRepository.save(testCategory);
 
         mockMvc.perform(delete("/api/categories/{id}", category.getId()))
                 .andExpect(status().isForbidden());

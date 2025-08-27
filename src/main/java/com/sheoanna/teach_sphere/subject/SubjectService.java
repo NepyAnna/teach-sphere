@@ -54,11 +54,11 @@ public class SubjectService {
         existSubject.setName(request.name());
         existSubject.setCategory(existCategory);
 
-        return  subjectMapper.toResponse(existSubject);
+        return subjectMapper.toResponse(existSubject);
     }
 
-    public  void deleteSubject(Long id) {
-        if(subjectRepository.findById(id).isEmpty()) {
+    public void deleteSubject(Long id) {
+        if (subjectRepository.findById(id).isEmpty()) {
             throw new SubjectNotFoundException(id);
         }
         subjectRepository.deleteById(id);

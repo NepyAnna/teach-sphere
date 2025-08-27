@@ -5,15 +5,11 @@ import com.sheoanna.teach_sphere.category.dtos.CategoryRequest;
 import com.sheoanna.teach_sphere.category.dtos.CategoryResponse;
 import com.sheoanna.teach_sphere.category.exceptions.CategoryAlreadyExistsException;
 import com.sheoanna.teach_sphere.category.exceptions.CategoryNotFoundException;
-import com.sheoanna.teach_sphere.mentor_subject.MentorSubjectRepository;
-import com.sheoanna.teach_sphere.subject.SubjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

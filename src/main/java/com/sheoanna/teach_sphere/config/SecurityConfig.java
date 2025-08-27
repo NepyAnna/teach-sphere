@@ -6,6 +6,7 @@ import com.sheoanna.teach_sphere.security.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -54,8 +55,18 @@ public class SecurityConfig {
                         session ->
                                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/refresh")
+                        auth
+                                .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/refresh")
                                 .permitAll()
+                                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/users", "/api/profiles")
+                                .hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/api/categories", "/api/categories/**", "api/subjects", "api/subjects/**")
+                                .hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PUT, "/api/categories", "/api/categories/**", "api/subjects", "api/subjects/**")
+                                .hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/api/categories", "/api/categories/**", "api/subjects", "api/subjects/**")
+                                .hasRole("ADMIN")
                                 .anyRequest()
                                 .authenticated())
                 .addFilterBefore(tokenBlacklistFilter, LogoutFilter.class)

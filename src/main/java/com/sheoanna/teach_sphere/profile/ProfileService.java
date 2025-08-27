@@ -14,7 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,7 +40,7 @@ public class ProfileService {
         return profileMapper.toResponse(profile);
     }
 
-    @Transactional(isolation = Isolation.READ_COMMITTED)
+    @Transactional
     public ProfileResponse createProfile(ProfileRequest newProfileData) {
         User user = userService.getAuthenticatedUser();
 
@@ -55,7 +54,7 @@ public class ProfileService {
         return profileMapper.toResponse(profileRepository.save(profile));
     }
 
-    @Transactional(isolation = Isolation.READ_COMMITTED)
+    @Transactional
     public ProfileResponse updateProfile(ProfileRequest newProfileData) {
         User user = userService.getAuthenticatedUser();
         Profile profile = profileRepository.findByUserId(user.getId())

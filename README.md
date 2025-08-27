@@ -27,7 +27,6 @@ It supports both access and refresh tokens, with an additional mechanism to inva
 - Refresh — Refresh token rotates a new pair of tokens, invalidating the old refresh token in Redis.
 - Logout — Both access and refresh tokens are blacklisted in Redis until they expire.
 
-
 ## Technologies Used
 ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
 ![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
@@ -47,44 +46,66 @@ git clone https://github.com/NepyAnna/teach-sphere.git
 cd teach-sphere
 ```
 ### Run
+- In order to run the project you need to fill in all the variables in the .env file as specified in .env.example. and also docker must be installed and running
 
 ```bash
-./mvnw spring-boot:run
+docker-compose up -d --build 
 ```
-or
-```bash
-mvn spring-boot:run
-```
-Alternative Way to Run the Application
-If you are using an IDE such as IntelliJ IDEA,VS Code etc, you can simply click the “Run” button or run the main application class directly (the one annotated with @SpringBootApplication).
-For example, in IntelliJ IDEA, right-click the main class and choose "Run 'TeachSphereApplication...main()'".
+### Stop container
 
+```bash
+docker-compose down --volumes --remove-orphans
+```
 ## API Endpoints
 
-
 ### Registration / Login
-
+- POST http://localhost:8080/api/registar registration of users
+- POST http://localhost:8080/api/login for login
+- POST http://localhost:8080/api/refresh for refresh token
+- POST http://localhost:8080/api/logout for logout
 
 ### User
+- GET http://localhost:8080/api/users to get all users (only for ADMIN)
+- GET http://localhost:8080/api/users/{id} to get user by ID
+- PUT http://localhost:8080/api/users/{id} to update user by ID
+- DELETE http://localhost:8080/api/users/{id} to delete user by ID
 
 ### Profile
+- GET http://localhost:8080/api/profiles to get all profiles (only for ADMIN)
+- GET http://localhost:8080/api/profiles/{id} to get profile by ID
+- POST http://localhost:8080/api/profiles to create profile
+- PUT http://localhost:8080/api/profiles/{id} to update profile by ID
+- DELETE http://localhost:8080/api/profiles/{id} to delete profile by ID
 
 ### Category
+- GET http://localhost:8080/api/categories to get all categories
+- GET http://localhost:8080/api/categories/{id} to get category by ID
+- POST http://localhost:8080/api/categories to create category(only for ADMIN)
+- PUT http://localhost:8080/api/categories/{id} to update category by ID(only for ADMIN)
+- DELETE http://localhost:8080/api/categories/{id} to delete category by ID(only for ADMIN)
 
 ### Subject
+- GET http://localhost:8080/api/subjects to get all subjects
+- GET http://localhost:8080/api/subjects/{id} to get subject by ID
+- POST http://localhost:8080/api/subjects to create subject(only for ADMIN)
+- PUT http://localhost:8080/api/subjects/{id} to update subject by ID(only for ADMIN)
+- DELETE http://localhost:8080/api/subjects/{id} to delete subject by ID(only for ADMIN)
+
+### Mentor Subject
 
 ### Session Request
 
 ### Review
 
-
 ## Running Tests
 
 ## EER Diagram
 
+[![temp-Imagebj7e-I8.avif](https://i.postimg.cc/TYGNwn19/temp-Imagebj7e-I8.avif)](https://postimg.cc/YjnzDG1G)
+
 ## Chat Flow Diagram
 
-## Class Diagram
+[![temp-Image-CZjqb-H.avif](https://i.postimg.cc/d0dGrSST/temp-Image-CZjqb-H.avif)](https://postimg.cc/QB8BrSDX)
 
 ## Contributors
 

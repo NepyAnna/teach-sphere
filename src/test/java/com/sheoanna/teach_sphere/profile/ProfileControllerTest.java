@@ -1,12 +1,16 @@
 package com.sheoanna.teach_sphere.profile;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sheoanna.teach_sphere.cloudinary.CloudinaryService;
+import com.sheoanna.teach_sphere.cloudinary.UploadResult;
 import com.sheoanna.teach_sphere.user.Role;
 import com.sheoanna.teach_sphere.user.User;
 import com.sheoanna.teach_sphere.user.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -21,10 +25,12 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.Set;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ActiveProfiles("test")
 @SpringBootTest
@@ -63,11 +69,13 @@ class ProfileControllerTest {
     private CloudinaryService cloudinaryService;
 
     private final String BASE_URL = "/api/profiles";
-
     private User user;
 
     @BeforeEach
     void setup() {
+        profileRepository.deleteAll();
+        userRepository.deleteAll();
+
         user = User.builder()
                 .username("testuser")
                 .email("testemail@gmail.com")
@@ -80,8 +88,8 @@ class ProfileControllerTest {
                 .location("Location")
                 .user(user)
                 .build();
-
         user.setProfile(profile);
+        profileRepository.save(profile);
         userRepository.save(user);
     }
 
@@ -93,6 +101,60 @@ class ProfileControllerTest {
         mockMvc.perform(get(BASE_URL + "/" + profileId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.bio").value("My bio"));
+    }
+
+    @Test
+    @WithMockUser(username = "nonexistent", roles = {"STUDENT"})
+    void getProfileById_NotFound() throws Exception {
+        Long nonExistentId = 999L;
+
+        mockMvc.perform(get(BASE_URL + "/" + nonExistentId))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Profile with ID " + nonExistentId + " not found."));
+    }
+
+    @Test
+    @WithMockUser(username = "newuser", roles = {"STUDENT"})
+    void createProfile_Success() throws Exception {
+        User newUser = User.builder()
+                .username("newuser")
+                .email("newuseremail@gmail.com")
+                .password("encodedPassword")
+                .roles(Set.of(Role.STUDENT))
+                .build();
+        userRepository.save(newUser);
+        UploadResult mockResult = new UploadResult("mock-url.com/avatar.png", "mock_public_id");
+
+        when(cloudinaryService.upload(any(), anyString())).thenReturn(mockResult);
+
+        MockMultipartFile avatar = new MockMultipartFile("avatar", "avatar.png", "image/png", "image-content".getBytes());
+
+        mockMvc.perform(multipart("/api/profiles")
+                        .file(avatar)
+                        .param("bio", "New bio")
+                        .param("location", "Kyiv")
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.bio").value("New bio"))
+                .andExpect(jsonPath("$.location").value("Kyiv"))
+                .andExpect(jsonPath("$.avatarUrl").value("mock-url.com/avatar.png"));
+    }
+
+    @WithMockUser(username = "testuser", roles = {"STUDENT"})
+    void createProfile_AlreadyExists() throws Exception {
+        UploadResult mockResult = new UploadResult("mock-url.com/avatar.png", "mock_public_id");
+
+        when(cloudinaryService.upload(any(), anyString())).thenReturn(mockResult);
+
+        MockMultipartFile avatar = new MockMultipartFile("avatar", "avatar.png", "image/png", "image-content".getBytes());
+
+        mockMvc.perform(multipart("/api/profiles")
+                        .file(avatar)
+                        .param("bio", "New bio")
+                        .param("location", "Kyiv")
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andExpect(status().isConflict())
+                .andExpect(content().string("Profile for user with ID " + user.getId() + " already exists!"));
     }
 
     @Test

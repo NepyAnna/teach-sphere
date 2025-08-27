@@ -56,7 +56,7 @@ class CategoryControllerTest {
     private final String BASE_URL = "/api/categories";
 
     @BeforeEach
-    void cleanDb() {
+    void setup() {
         categoryRepository.deleteAll();
         testCategory = Category.builder()
                 .name("Test Category")

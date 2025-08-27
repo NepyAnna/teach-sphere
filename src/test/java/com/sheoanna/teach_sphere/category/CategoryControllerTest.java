@@ -13,6 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -41,7 +42,6 @@ class CategoryControllerTest {
         registry.add("spring.jpa.hibernate.ddl-auto", () -> "create-drop");
         registry.add("spring.jpa.database-platform", () -> "org.hibernate.dialect.PostgreSQLDialect");
     }
-
     @Autowired
     private MockMvc mockMvc;
 
@@ -53,6 +53,7 @@ class CategoryControllerTest {
 
     private Category testCategory;
     private CategoryRequest request;
+    private final String BASE_URL = "/api/categories";
 
     @BeforeEach
     void cleanDb() {
@@ -68,7 +69,7 @@ class CategoryControllerTest {
     void findAllCategories_ReturnsPage() throws Exception {
         categoryRepository.save(testCategory);
 
-        mockMvc.perform(get("/api/categories"))
+        mockMvc.perform(get(BASE_URL))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(1));
     }
@@ -76,7 +77,7 @@ class CategoryControllerTest {
     @Test
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     void createCategory_AsAdmin_ReturnsCreated() throws Exception {
-        mockMvc.perform(post("/api/categories")
+        mockMvc.perform(post(BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated());
@@ -85,7 +86,7 @@ class CategoryControllerTest {
     @Test
     @WithMockUser(username = "student", roles = {"STUDENT"})
     void createCategory_AsStudent_Forbidden() throws Exception {
-        mockMvc.perform(post("/api/categories")
+        mockMvc.perform(post(BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isForbidden());
@@ -97,7 +98,7 @@ class CategoryControllerTest {
         Category category = categoryRepository.save(testCategory);
         CategoryRequest updateRequest = new CategoryRequest("Updated Name");
 
-        mockMvc.perform(put("/api/categories/{id}", category.getId())
+        mockMvc.perform(MockMvcRequestBuilders.put(BASE_URL + "/" + category.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateRequest)))
                 .andExpect(status().isOk())
@@ -115,7 +116,7 @@ class CategoryControllerTest {
         Category category = Category.builder().name("To Delete").build();
         category = categoryRepository.save(category);
 
-        mockMvc.perform(delete("/api/categories/{id}", category.getId()))
+        mockMvc.perform(MockMvcRequestBuilders.delete(BASE_URL + "/" + category.getId()))
                 .andExpect(status().isNoContent());
 
         assertFalse(categoryRepository.findById(category.getId()).isPresent());
@@ -128,7 +129,7 @@ class CategoryControllerTest {
         category = categoryRepository.save(category);
         CategoryRequest updateRequest = new CategoryRequest("Updated Name");
 
-        mockMvc.perform(put("/api/categories/{id}", category.getId())
+        mockMvc.perform(MockMvcRequestBuilders.put(BASE_URL + "/" + category.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateRequest)))
                 .andExpect(status().isForbidden());
@@ -139,7 +140,7 @@ class CategoryControllerTest {
     void deleteCategory_AsStudent_Forbidden() throws Exception {
         Category category = categoryRepository.save(testCategory);
 
-        mockMvc.perform(delete("/api/categories/{id}", category.getId()))
+        mockMvc.perform(MockMvcRequestBuilders.delete(BASE_URL + "/" + category.getId()))
                 .andExpect(status().isForbidden());
     }
 }

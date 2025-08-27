@@ -2,7 +2,6 @@ package com.sheoanna.teach_sphere.subject;
 
 import com.sheoanna.teach_sphere.subject.dtos.SubjectRequest;
 import com.sheoanna.teach_sphere.subject.dtos.SubjectResponse;
-import com.sheoanna.teach_sphere.subject.dtos.SubjectResponseWithMentorSub;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

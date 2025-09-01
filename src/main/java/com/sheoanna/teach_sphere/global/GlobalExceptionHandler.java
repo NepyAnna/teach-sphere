@@ -1,19 +1,26 @@
 package com.sheoanna.teach_sphere.global;
 
 import com.sheoanna.teach_sphere.auth.exceptions.RefreshTokenCookiesNotFoundException;
+import com.sheoanna.teach_sphere.category.exceptions.CategoryAlreadyExistsException;
 import com.sheoanna.teach_sphere.category.exceptions.CategoryNotFoundException;
+import com.sheoanna.teach_sphere.mentor_subject.exceptions.MentorSubjectNotFoundException;
 import com.sheoanna.teach_sphere.profile.exceptions.ProfileAlreadyExistsException;
 import com.sheoanna.teach_sphere.profile.exceptions.ProfileNotFoundException;
+import com.sheoanna.teach_sphere.subject.exceptions.SubjectByNameAlreadyExistsException;
 import com.sheoanna.teach_sphere.subject.exceptions.SubjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.naming.AuthenticationException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -56,12 +63,35 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(CategoryNotFoundException.class)
-    public ResponseEntity<String> handleCategoryNotFoundException(CategoryNotFoundException ex){
+    public ResponseEntity<String> handleCategoryNotFoundException(CategoryNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
+    @ExceptionHandler(CategoryAlreadyExistsException.class)
+    public ResponseEntity<String> handleCategoryAlreadyExistsException(CategoryAlreadyExistsException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
+
     @ExceptionHandler(SubjectNotFoundException.class)
-    public ResponseEntity<String> handleSubjectNotFoundByIDException(SubjectNotFoundException ex){
+    public ResponseEntity<String> handleSubjectNotFoundException(SubjectNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(SubjectByNameAlreadyExistsException.class)
+    public ResponseEntity<String> handleSubjectByNameAlreadyExistsException(SubjectByNameAlreadyExistsException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(MentorSubjectNotFoundException.class)
+    public ResponseEntity<String> handleMentorSubjectNotFoundByIDException(MentorSubjectNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<List<String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        List<String> errors = ex.getBindingResult().getFieldErrors().stream()
+                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .toList();
+        return ResponseEntity.badRequest().body(errors);
     }
 }

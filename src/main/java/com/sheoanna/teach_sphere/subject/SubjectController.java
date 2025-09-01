@@ -2,6 +2,7 @@ package com.sheoanna.teach_sphere.subject;
 
 import com.sheoanna.teach_sphere.subject.dtos.SubjectRequest;
 import com.sheoanna.teach_sphere.subject.dtos.SubjectResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,13 +30,13 @@ public class SubjectController {
     }
 
     @PostMapping("")
-    public ResponseEntity<SubjectResponse> createSubject(@RequestBody SubjectRequest request) {
+    public ResponseEntity<SubjectResponse> createSubject(@Valid @RequestBody SubjectRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(subjectService.createSubject(request));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SubjectResponse> updateSubject(@PathVariable Long id, @RequestBody SubjectRequest request) {
+    public ResponseEntity<SubjectResponse> updateSubject(@PathVariable Long id,@Valid @RequestBody SubjectRequest request) {
         return ResponseEntity.ok()
                 .body(subjectService.updateSubject(id, request));
     }

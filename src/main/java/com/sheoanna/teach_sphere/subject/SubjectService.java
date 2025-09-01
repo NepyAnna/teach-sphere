@@ -69,4 +69,11 @@ public class SubjectService {
             throw new SubjectByNameAlreadyExistsException(name);
         }
     }
+
+    public Subject findSubjectByIdObj(Long id) {
+        Subject existSubject = subjectRepository.findById(id)
+                .orElseThrow(() -> new SubjectNotFoundException(id));
+
+        return existSubject;
+    }
 }

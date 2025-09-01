@@ -6,6 +6,7 @@ import com.sheoanna.teach_sphere.category.exceptions.CategoryNotFoundException;
 import com.sheoanna.teach_sphere.mentor_subject.exceptions.MentorSubjectNotFoundException;
 import com.sheoanna.teach_sphere.profile.exceptions.ProfileAlreadyExistsException;
 import com.sheoanna.teach_sphere.profile.exceptions.ProfileNotFoundException;
+import com.sheoanna.teach_sphere.review.exception.MentorSubjectReviewNotFoundException;
 import com.sheoanna.teach_sphere.subject.exceptions.SubjectByNameAlreadyExistsException;
 import com.sheoanna.teach_sphere.subject.exceptions.SubjectNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -18,9 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.naming.AuthenticationException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -84,6 +83,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MentorSubjectNotFoundException.class)
     public ResponseEntity<String> handleMentorSubjectNotFoundByIDException(MentorSubjectNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(MentorSubjectReviewNotFoundException.class)
+    public ResponseEntity<String> handleMentorSubjectReviewNotFoundByIDException(MentorSubjectReviewNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 

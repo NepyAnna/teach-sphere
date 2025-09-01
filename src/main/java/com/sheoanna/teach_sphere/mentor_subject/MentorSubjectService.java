@@ -31,8 +31,7 @@ public class MentorSubjectService {
     }
 
     public MentorSubjectResponse findById(Long id) {
-        MentorSubject existMentorSubject = mentorSubjectRepository.findById(id)
-                .orElseThrow(() -> new MentorSubjectNotFoundException(id));
+        MentorSubject existMentorSubject = findByIdObj(id);
         return mentorSubjectMapper.toResponse(existMentorSubject);
     }
 
@@ -56,8 +55,7 @@ public class MentorSubjectService {
     @Transactional
     public MentorSubjectResponse updateMentorSubject(Long mentorSubjectId, MentorSubjectRequest request) {
         User existMentor = userService.getAuthenticatedUser();
-        MentorSubject mentorSubject = mentorSubjectRepository.findById(mentorSubjectId)
-                .orElseThrow(() -> new MentorSubjectNotFoundException(mentorSubjectId));
+        MentorSubject mentorSubject = findByIdObj(mentorSubjectId);
         checkCanModify(existMentor, mentorSubject);
         Subject existSubject = subjectService.findSubjectByIdObj(request.subjectId());
         mentorSubject.setSubject(existSubject);
@@ -67,8 +65,7 @@ public class MentorSubjectService {
     @Transactional
     public void deleteMentorSubject(Long id) {
         User existMentor = userService.getAuthenticatedUser();
-        MentorSubject mentorSubject = mentorSubjectRepository.findById(id)
-                .orElseThrow(() -> new MentorSubjectNotFoundException(id));
+        MentorSubject mentorSubject = findByIdObj(id);
         checkCanModify(existMentor, mentorSubject);
         mentorSubjectRepository.delete(mentorSubject);
     }
@@ -77,5 +74,10 @@ public class MentorSubjectService {
         if (!mentorSubject.getMentor().getId().equals(existMentor.getId())) {
             throw new AccessDeniedException("You are not allowed to modify or delete this mentor subject.");
         }
+    }
+
+    public MentorSubject findByIdObj(Long id){
+        return  mentorSubjectRepository.findById(id)
+                .orElseThrow(() -> new MentorSubjectNotFoundException(id));
     }
 }

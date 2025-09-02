@@ -1,6 +1,7 @@
 package com.sheoanna.teach_sphere.mentor_subject;
 
 import com.sheoanna.teach_sphere.review.MentorSubjectReview;
+import com.sheoanna.teach_sphere.session_request.SessionRequest;
 import com.sheoanna.teach_sphere.subject.Subject;
 import com.sheoanna.teach_sphere.user.User;
 import jakarta.persistence.*;
@@ -38,6 +39,6 @@ public class MentorSubject {
     @OneToMany(mappedBy = "mentorSubject", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MentorSubjectReview> reviews = new ArrayList<>();
 
-/*    @OneToMany(mappedBy = "mentorSubject", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SessionRequest> sessionRequests = new ArrayList<>();*/
+    @OneToMany(mappedBy = "mentorSubject", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SessionRequest> sessionRequests = new ArrayList<>();
 }

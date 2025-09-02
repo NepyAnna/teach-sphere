@@ -26,7 +26,8 @@ public class MentorSubjectController {
 
     @GetMapping("/{id}")
     public ResponseEntity<MentorSubjectResponse> findById(@PathVariable Long id) {
-        return ResponseEntity.ok().body(mentorSubjectService.findById(id));
+        return ResponseEntity.ok()
+                .body(mentorSubjectService.findById(id));
     }
 
     @PostMapping("")
@@ -37,7 +38,8 @@ public class MentorSubjectController {
 
     @PutMapping("/{mentorSubjectId}")
     public ResponseEntity<MentorSubjectResponse> updateMentorSubject(@PathVariable Long mentorSubjectId, @Valid @RequestBody MentorSubjectRequest request) {
-        return ResponseEntity.ok().body(mentorSubjectService.updateMentorSubject(mentorSubjectId, request));
+        return ResponseEntity.ok()
+                .body(mentorSubjectService.updateMentorSubject(mentorSubjectId, request));
     }
 
     @DeleteMapping("/{id}")

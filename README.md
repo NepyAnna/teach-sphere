@@ -92,10 +92,20 @@ docker-compose down --volumes --remove-orphans
 - DELETE http://localhost:8080/api/subjects/{id} to delete subject by ID(only for ADMIN)
 
 ### Mentor Subject
-
-### Session Request
+- GET http://localhost:8080/api/mentor_subjects to get all mentor subjects
+- GET http://localhost:8080/api/mentor_subjects/{id} to get mentor subject by ID
+- POST http://localhost:8080/api/mentor_subjects to create mentor subject(only for MENTOR)
+- PUT http://localhost:8080/api/mentor_subjects/{id} to update mentor subject by ID(only for MENTOR)
+- DELETE http://localhost:8080/api/mentor_subjects/{id} to delete mentor subject by ID(only for MENTOR)
 
 ### Review
+- GET http://localhost:8080/api/mentor_subject_reviews to get all mentor subject reviews
+- GET http://localhost:8080/api/mentor_subject_reviews/{id} to get mentor subject review by ID
+- POST http://localhost:8080/api/mentor_subject_reviews to create mentor subject review(only for STUDENT)
+- PUT http://localhost:8080/api/mentor_subject_reviews/{id} to update mentor subject review by ID(only for STUDENT)
+- DELETE http://localhost:8080/api/mentor_subject_reviews/{id} to delete mentor subject review by ID(only for STUDENT)
+
+### Session Request
 
 ## Running Tests
 

@@ -1,5 +1,6 @@
 package com.sheoanna.teach_sphere.mentor_subject;
 
+import com.sheoanna.teach_sphere.review.MentorSubjectReview;
 import com.sheoanna.teach_sphere.subject.Subject;
 import com.sheoanna.teach_sphere.user.User;
 import jakarta.persistence.*;
@@ -9,6 +10,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="mentor_subjects")
@@ -31,9 +35,9 @@ public class MentorSubject {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Subject subject;
 
-/*    @OneToMany(mappedBy = "mentorSubject", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Review> reviews = new ArrayList<>();
-
     @OneToMany(mappedBy = "mentorSubject", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MentorSubjectReview> reviews = new ArrayList<>();
+
+/*    @OneToMany(mappedBy = "mentorSubject", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SessionRequest> sessionRequests = new ArrayList<>();*/
 }

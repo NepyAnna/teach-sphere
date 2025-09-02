@@ -30,8 +30,20 @@ INSERT INTO profiles (avatar_url, bio, location, photo_public_id, user_id) VALUE
 ('/images/default-profile.jpg', 'Aspiring programmer', 'Odessa', 'avatar3_pubid', 3);
 
 -- Mentor Subjects
-INSERT INTO mentor_subjects (user_id, subject_id) VALUES (1, 1);
-INSERT INTO mentor_subjects (user_id, subject_id) VALUES (1, 2);
+INSERT INTO mentor_subjects (user_id, subject_id) VALUES (2, 1);
+INSERT INTO mentor_subjects (user_id, subject_id) VALUES (2, 2);
 INSERT INTO mentor_subjects (user_id, subject_id) VALUES (2, 3);
 INSERT INTO mentor_subjects (user_id, subject_id) VALUES (2, 4);
 INSERT INTO mentor_subjects (user_id, subject_id) VALUES (2, 5);
+
+-- Mentor Subject Review
+INSERT INTO mentor_subjects_reviews (rating, body, created_at, mentor_subject_id, user_id) VALUES
+(4.5, 'Good teacher.', NOW(), 1, 2);
+INSERT INTO mentor_subjects_reviews (rating, body, created_at, mentor_subject_id, user_id) VALUES
+(3.0, 'Can not understand anything.', NOW(), 2, 2);
+INSERT INTO mentor_subjects_reviews (rating, body, created_at, mentor_subject_id, user_id) VALUES
+(5.0, 'All was clear and easy.', NOW(), 3, 2);
+INSERT INTO mentor_subjects_reviews (rating, body, created_at, mentor_subject_id, user_id) VALUES
+(4.0, 'I am not sure, but could be better.', NOW(), 4, 2);
+INSERT INTO mentor_subjects_reviews (rating, body, created_at, mentor_subject_id, user_id) VALUES
+(5.0, 'She is a genius!', NOW(), 5, 2);

@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/mentors_subject_reviews")
+@RequestMapping("/api/mentor_subject_reviews")
 @RequiredArgsConstructor
 public class MentorSubjectReviewController {
     private final MentorSubjectReviewService reviewService;

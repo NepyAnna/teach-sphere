@@ -5,6 +5,7 @@ import com.sheoanna.teach_sphere.auth.dtos.AuthResponse;
 import com.sheoanna.teach_sphere.auth.dtos.RegisterRequest;
 import com.sheoanna.teach_sphere.auth.dtos.RegisterResponse;
 import com.sheoanna.teach_sphere.auth.exceptions.RefreshTokenCookiesNotFoundException;
+import com.sheoanna.teach_sphere.email.EmailService;
 import com.sheoanna.teach_sphere.redis.RedisService;
 import com.sheoanna.teach_sphere.user.Role;
 import com.sheoanna.teach_sphere.user.User;
@@ -31,6 +32,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     public RegisterResponse register(RegisterRequest registerDto) {
         if (!Role.allAllowed(registerDto.roles())) {
@@ -44,6 +46,7 @@ public class AuthService {
                 .build();
 
         userRepository.save(user);
+        emailService.sendRegistrationEmail(user.getEmail(), user.getUsername());
 
         return new RegisterResponse(user.getId(), user.getUsername(), user.getRoles());
     }

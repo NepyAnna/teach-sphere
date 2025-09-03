@@ -118,7 +118,7 @@ class ProfileServiceTest {
         when(cloudinaryService.upload(any(), any())).thenReturn(new UploadResult("url", "publicId"));
         when(profileMapper.toResponse(profile)).thenReturn(response);
 
-        ProfileResponse updated = profileService.updateProfile(request);
+        ProfileResponse updated = profileService.updateProfile(1L,request);
 
         assertEquals("My bio", updated.bio());
         verify(cloudinaryService).upload(multipartFile, "profiles");

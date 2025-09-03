@@ -55,7 +55,7 @@ public class ProfileService {
     }
 
     @Transactional
-    public ProfileResponse updateProfile(ProfileRequest newProfileData) {
+    public ProfileResponse updateProfile(Long id,ProfileRequest newProfileData) {
         User user = userService.getAuthenticatedUser();
         Profile profile = profileRepository.findByUserId(user.getId())
                 .orElseThrow(() -> new ProfileNotFoundException("Profile for user ID " + user.getId() + " not found"));

@@ -1,7 +1,11 @@
 package com.sheoanna.teach_sphere.user;
 
 import com.sheoanna.teach_sphere.profile.Profile;
+import com.sheoanna.teach_sphere.user.dtos.UserMapper;
+import com.sheoanna.teach_sphere.user.dtos.UserResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,6 +15,17 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
+
+    public Page<UserResponse> findAllUsers(Pageable pageable) {
+        return userRepository.findAll(pageable).map(userMapper::toResponse);
+    }
+
+    public UserResponse findById(Long id) {
+        User existedUser = userRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return userMapper.toResponse(existedUser);
+    }
 
     public User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/categories")
 @RequiredArgsConstructor
-@Tag(name = "Category", description = "Operations related to category")
+@Tag(name = "Category", description = "Operations related to category.")
 public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping("")
     @Operation(summary = "Get all categories.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Categories returned successfully"),
+                    @ApiResponse(responseCode = "200", description = "Categories returned successfully."),
                     @ApiResponse(responseCode = "400", ref = "#/components/responses/BadRequest"),
                     @ApiResponse(responseCode = "500", ref = "#/components/responses/InternalServerError")
             })
@@ -36,7 +36,7 @@ public class CategoryController {
     @GetMapping("/{id}")
     @Operation(summary = "Get category by ID.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Category returned successfully"),
+                    @ApiResponse(responseCode = "200", description = "Category returned successfully."),
                     @ApiResponse(responseCode = "400", ref = "#/components/responses/BadRequest"),
                     @ApiResponse(responseCode = "404", ref = "#/components/responses/CategoryNotFound"),
                     @ApiResponse(responseCode = "500", ref = "#/components/responses/InternalServerError")
@@ -48,7 +48,7 @@ public class CategoryController {
     @PostMapping("")
     @Operation(summary = "Create category.",
             responses = {
-                    @ApiResponse(responseCode = "201", description = "Category created successfully"),
+                    @ApiResponse(responseCode = "201", description = "Category created successfully."),
                     @ApiResponse(responseCode = "400", ref = "#/components/responses/BadRequest"),
                     @ApiResponse(responseCode = "401", ref = "#/components/responses/Unauthorized"),
                     @ApiResponse(responseCode = "403", ref = "#/components/responses/Forbidden"),
@@ -61,7 +61,7 @@ public class CategoryController {
     @PutMapping("/{id}")
     @Operation(summary = "Update category by ID.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Category updated successfully"),
+                    @ApiResponse(responseCode = "200", description = "Category updated successfully."),
                     @ApiResponse(responseCode = "400", ref = "#/components/responses/BadRequest"),
                     @ApiResponse(responseCode = "401", ref = "#/components/responses/Unauthorized"),
                     @ApiResponse(responseCode = "403", ref = "#/components/responses/Forbidden"),
@@ -75,7 +75,7 @@ public class CategoryController {
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete category by ID.",
             responses = {
-                    @ApiResponse(responseCode = "204", description = "Category deleted successfully"),
+                    @ApiResponse(responseCode = "204", description = "Category deleted successfully."),
                     @ApiResponse(responseCode = "400", ref = "#/components/responses/BadRequest"),
                     @ApiResponse(responseCode = "401", ref = "#/components/responses/Unauthorized"),
                     @ApiResponse(responseCode = "403", ref = "#/components/responses/Forbidden"),

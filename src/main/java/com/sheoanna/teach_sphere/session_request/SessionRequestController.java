@@ -74,6 +74,6 @@ public class SessionRequestController {
             })
     public ResponseEntity<SessionRequestResponse> updateStatus(@Valid @PathVariable Long id,
                                                                @RequestBody UpdateSessionStatusRequest request) {
-        return ResponseEntity.ok().body(sessionService.updateStatus(id,request.status()));
+        return ResponseEntity.ok().body(sessionService.updateStatus(id, request.status()));
     }
 }

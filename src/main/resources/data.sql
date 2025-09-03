@@ -38,12 +38,12 @@ INSERT INTO mentor_subjects (user_id, subject_id) VALUES (2, 5);
 
 -- Mentor Subject Review
 INSERT INTO mentor_subjects_reviews (rating, body, created_at, mentor_subject_id, user_id) VALUES
-(4.5, 'Good teacher.', NOW(), 1, 2);
+(4.5, 'Good teacher.', NOW(), 1, 3);
 INSERT INTO mentor_subjects_reviews (rating, body, created_at, mentor_subject_id, user_id) VALUES
-(3.0, 'Can not understand anything.', NOW(), 2, 2);
+(3.0, 'Can not understand anything.', NOW(), 2, 3);
 INSERT INTO mentor_subjects_reviews (rating, body, created_at, mentor_subject_id, user_id) VALUES
-(5.0, 'All was clear and easy.', NOW(), 3, 2);
+(5.0, 'All was clear and easy.', NOW(), 3, 3);
 INSERT INTO mentor_subjects_reviews (rating, body, created_at, mentor_subject_id, user_id) VALUES
-(4.0, 'I am not sure, but could be better.', NOW(), 4, 2);
+(4.0, 'I am not sure, but could be better.', NOW(), 4, 3);
 INSERT INTO mentor_subjects_reviews (rating, body, created_at, mentor_subject_id, user_id) VALUES
-(5.0, 'She is a genius!', NOW(), 5, 2);
+(5.0, 'She is a genius!', NOW(), 5, 3);

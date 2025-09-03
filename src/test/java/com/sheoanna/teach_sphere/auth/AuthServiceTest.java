@@ -4,6 +4,7 @@ import com.sheoanna.teach_sphere.auth.dtos.AuthRequest;
 import com.sheoanna.teach_sphere.auth.dtos.AuthResponse;
 import com.sheoanna.teach_sphere.auth.dtos.RegisterRequest;
 import com.sheoanna.teach_sphere.auth.dtos.RegisterResponse;
+import com.sheoanna.teach_sphere.email.EmailService;
 import com.sheoanna.teach_sphere.redis.RedisService;
 import com.sheoanna.teach_sphere.user.Role;
 import com.sheoanna.teach_sphere.user.User;
@@ -21,12 +22,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import java.util.Date;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -43,6 +42,8 @@ class AuthServiceTest {
     UserRepository userRepository;
     @Mock
     PasswordEncoder passwordEncoder;
+    @Mock
+    private EmailService emailService;
 
     @InjectMocks
     AuthService authService;
@@ -83,6 +84,7 @@ class AuthServiceTest {
             assertEquals("user1", response.username());
             assertEquals(1L, response.id());
             verify(userRepository).save(any(User.class));
+            verify(emailService).sendRegistrationEmail("email@test.com", "user1");
         }
 
         @Test
@@ -99,7 +101,7 @@ class AuthServiceTest {
         HttpServletResponse servletResponse;
 
         @BeforeEach
-        void init() {
+        void setUp() {
             servletResponse = mock(HttpServletResponse.class);
         }
 

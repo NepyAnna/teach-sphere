@@ -6,6 +6,7 @@ import com.sheoanna.teach_sphere.review.dtos.MentorSubjectReviewMapper;
 import com.sheoanna.teach_sphere.review.dtos.MentorSubjectReviewRequest;
 import com.sheoanna.teach_sphere.review.dtos.MentorSubjectReviewResponse;
 import com.sheoanna.teach_sphere.review.exception.MentorSubjectReviewNotFoundException;
+import com.sheoanna.teach_sphere.user.Role;
 import com.sheoanna.teach_sphere.user.User;
 import com.sheoanna.teach_sphere.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,8 @@ public class MentorSubjectReviewService {
         MentorSubject existedMentorSubject = mentorSubjectService.findByIdObj(request.mentorSubjectId());
         MentorSubjectReview newReview = reviewMapper.toEntity(request);
 
+        checkIfStudent(user);
+        
         newReview.setReviewer(user);
         newReview.setMentorSubject(existedMentorSubject);
         reviewRepository.save(newReview);
@@ -83,6 +86,12 @@ public class MentorSubjectReviewService {
     public void checkCanModify(User user, MentorSubjectReview review) {
         if (!review.getReviewer().getId().equals(user.getId())) {
             throw new AccessDeniedException("You are not allowed to modify or delete this mentor subject review.");
+        }
+    }
+
+    public void checkIfStudent(User user){
+        if (user.getRoles().stream().noneMatch(role -> role == Role.STUDENT)) {
+            throw new RuntimeException("Only user-student allowed.");
         }
     }
 }

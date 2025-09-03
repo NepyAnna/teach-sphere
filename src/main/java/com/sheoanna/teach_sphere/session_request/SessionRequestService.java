@@ -10,6 +10,8 @@ import com.sheoanna.teach_sphere.user.Role;
 import com.sheoanna.teach_sphere.user.User;
 import com.sheoanna.teach_sphere.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,28 +26,26 @@ public class SessionRequestService {
     private final UserService userService;
     private final MentorSubjectService mentorSubjectService;
 
-    public List<SessionRequestResponse> findRequestsForStudent() {
+    public Page<SessionRequestResponse> findRequestsForStudent(Pageable pageable) {
         User student = userService.getAuthenticatedUser();
-        return sessionRepository.findByStudentId(student.getId()).stream()
-                .map(sessionMapper::toResponse)
-                .toList();
+        checkIfStudent(student);
+        return sessionRepository.findByStudentId(student.getId(),pageable)
+                .map(sessionMapper::toResponse);
     }
 
-    public List<SessionRequestResponse> findRequestsForMentor() {
+    public Page<SessionRequestResponse> findRequestsForMentor(Pageable pageable) {
         User mentor = userService.getAuthenticatedUser();
-        return sessionRepository.findByMentorSubjectMentorId(mentor.getId()).stream()
-                .map(sessionMapper::toResponse)
-                .toList();
+        checkIfMentor(mentor);
+        return sessionRepository.findByMentorSubjectMentorId(mentor.getId(), pageable)
+                .map(sessionMapper::toResponse);
     }
 
     @Transactional
     public SessionRequestResponse createSessionRequest(SessionRequestRequest request) {
         User student = userService.getAuthenticatedUser();
         MentorSubject mentorSubject = mentorSubjectService.findByIdObj(request.mentorSubjectId());
+        checkIfStudent(student);
 
-        if (student.getRoles().stream().noneMatch(role -> role == Role.STUDENT)) {
-            throw new RuntimeException("Only user-student can add session request.");
-        }
         SessionRequest newSessionRequest = sessionMapper.toEntity(request);
         newSessionRequest.setMentorSubject(mentorSubject);
         newSessionRequest.setStudent(student);
@@ -67,5 +67,17 @@ public class SessionRequestService {
         request.setStatus(status);
 
         return sessionMapper.toResponse(request);
+    }
+
+    public void checkIfStudent(User user){
+        if (user.getRoles().stream().noneMatch(role -> role == Role.STUDENT)) {
+            throw new RuntimeException("Only user-student allowed.");
+        }
+    }
+
+    public void checkIfMentor(User user){
+        if (user.getRoles().stream().noneMatch(role -> role == Role.MENTOR)) {
+            throw new RuntimeException("Only user-mentor allowed.");
+        }
     }
 }

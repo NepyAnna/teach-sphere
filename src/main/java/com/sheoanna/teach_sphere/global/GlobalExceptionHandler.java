@@ -7,6 +7,7 @@ import com.sheoanna.teach_sphere.mentor_subject.exceptions.MentorSubjectNotFound
 import com.sheoanna.teach_sphere.profile.exceptions.ProfileAlreadyExistsException;
 import com.sheoanna.teach_sphere.profile.exceptions.ProfileNotFoundException;
 import com.sheoanna.teach_sphere.review.exception.MentorSubjectReviewNotFoundException;
+import com.sheoanna.teach_sphere.session_request.exceptions.SessionRequestNotFoundException;
 import com.sheoanna.teach_sphere.subject.exceptions.SubjectByNameAlreadyExistsException;
 import com.sheoanna.teach_sphere.subject.exceptions.SubjectNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -83,6 +84,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MentorSubjectNotFoundException.class)
     public ResponseEntity<String> handleMentorSubjectNotFoundByIDException(MentorSubjectNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(SessionRequestNotFoundException.class)
+    public ResponseEntity<String> handleSessionRequestNotFoundException(SessionRequestNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 

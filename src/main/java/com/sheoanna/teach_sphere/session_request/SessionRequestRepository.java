@@ -1,9 +1,10 @@
 package com.sheoanna.teach_sphere.session_request;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.List;
 
 public interface SessionRequestRepository extends JpaRepository<SessionRequest, Long> {
-    List<SessionRequest> findByStudentId(Long studentId);
-    List<SessionRequest> findByMentorSubjectMentorId(Long mentorId);
+    Page<SessionRequest> findByStudentId(Long studentId, Pageable pageable);
+    Page<SessionRequest> findByMentorSubjectMentorId(Long mentorId, Pageable pageable);
 }

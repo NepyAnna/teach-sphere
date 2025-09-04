@@ -4,8 +4,30 @@ TeachSphere is a web application that allows users to register as students or me
 The platform includes key features such as secure authentication using JWT, role-based access control, filtered mentor search, session requests with status tracking, a review system, and optional internal messaging.
 The backend is built with Spring Boot, following best development practices, a modular architecture, automated testing, and modern tools like Docker for containerization, GitHub Actions for CI/CD, and Cloudinary for image management.
 
-## Technologies Used
+## Main Feature
 
+### Authentication & Authorization with Asymmetric Keys and Redis Blacklist
+
+This project implements secure JWT-based authentication and authorization using RSA asymmetric keys for signing and verifying tokens.
+It supports both access and refresh tokens, with an additional mechanism to invalidate tokens before their natural expiration by maintaining a blacklist in Redis.
+
+#### Key Features:
+- Asymmetric cryptography (RSA) — Access and refresh tokens are signed with a private key and verified with a public key, ensuring high security without exposing the signing key to the server that only validates tokens.
+- Access & Refresh Tokens — Short-lived access tokens for API requests, long-lived refresh tokens for reissuing access tokens without re-login.
+- Token Blacklisting — When a user logs out or a refresh token is rotated, the old token is stored in Redis with a TTL equal to its remaining lifetime.
+
+##### Redis as a Blacklist Store:
+- Fast lookups: Redis is in-memory, enabling O(1) checks for token invalidation.
+- Automatic expiration: Tokens are stored with a TTL, so expired entries are removed automatically, avoiding manual cleanup.
+- Distributed environment friendly: Works seamlessly in multi-instance deployments where in-memory maps wouldn’t sync across nodes.
+
+##### Flow:
+- Login — User provides credentials → Server issues access & refresh tokens.
+- Requests — Access token is sent via Authorization: Bearer <token> header and validated against RSA public key + Redis blacklist check.
+- Refresh — Refresh token rotates a new pair of tokens, invalidating the old refresh token in Redis.
+- Logout — Both access and refresh tokens are blacklisted in Redis until they expire.
+
+## Technologies Used
 ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
 ![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
 ![Apache Maven](https://img.shields.io/badge/Apache%20Maven-C71A36?style=for-the-badge&logo=Apache%20Maven&logoColor=white)
@@ -24,44 +46,90 @@ git clone https://github.com/NepyAnna/teach-sphere.git
 cd teach-sphere
 ```
 ### Run
+- In order to run the project you need to fill in all the variables in the .env file as specified in .env.example. and also docker must be installed and running
 
 ```bash
-./mvnw spring-boot:run
+docker-compose up -d --build 
 ```
-or
+### Stop container
+
 ```bash
-mvn spring-boot:run
+docker-compose down --volumes --remove-orphans
 ```
-Alternative Way to Run the Application
-If you are using an IDE such as IntelliJ IDEA,VS Code etc, you can simply click the “Run” button or run the main application class directly (the one annotated with @SpringBootApplication).
-For example, in IntelliJ IDEA, right-click the main class and choose "Run 'TeachSphereApplication...main()'".
+
+### Clone from DockerHub 
+
+```bash
+docker pull sheoanna/teach-sphere-app:latest
+docker compose up -d --build
+```
 
 ## API Endpoints
 
-
 ### Registration / Login
-
+- POST http://localhost:8080/api/registar registration of users
+- POST http://localhost:8080/api/login for login
+- POST http://localhost:8080/api/refresh for refresh token
+- POST http://localhost:8080/api/logout for logout
 
 ### User
+- GET http://localhost:8080/api/users to get all users (only for ADMIN)
+- GET http://localhost:8080/api/users/{id} to get user by ID
+- PUT http://localhost:8080/api/users/{id} to update user by ID
+- DELETE http://localhost:8080/api/users/{id} to delete user by ID
 
 ### Profile
+- GET http://localhost:8080/api/profiles to get all profiles (only for ADMIN)
+- GET http://localhost:8080/api/profiles/{id} to get profile by ID
+- POST http://localhost:8080/api/profiles to create profile
+- PUT http://localhost:8080/api/profiles/{id} to update profile by ID
+- DELETE http://localhost:8080/api/profiles/{id} to delete profile by ID
 
 ### Category
+- GET http://localhost:8080/api/categories to get all categories
+- GET http://localhost:8080/api/categories/{id} to get category by ID
+- POST http://localhost:8080/api/categories to create category(only for ADMIN)
+- PUT http://localhost:8080/api/categories/{id} to update category by ID(only for ADMIN)
+- DELETE http://localhost:8080/api/categories/{id} to delete category by ID(only for ADMIN)
 
 ### Subject
+- GET http://localhost:8080/api/subjects to get all subjects
+- GET http://localhost:8080/api/subjects/{id} to get subject by ID
+- POST http://localhost:8080/api/subjects to create subject(only for ADMIN)
+- PUT http://localhost:8080/api/subjects/{id} to update subject by ID(only for ADMIN)
+- DELETE http://localhost:8080/api/subjects/{id} to delete subject by ID(only for ADMIN)
 
-### Session Request
+### Mentor Subject
+- GET http://localhost:8080/api/mentor_subjects to get all mentor subjects
+- GET http://localhost:8080/api/mentor_subjects/{id} to get mentor subject by ID
+- POST http://localhost:8080/api/mentor_subjects to create mentor subject(only for MENTOR)
+- PUT http://localhost:8080/api/mentor_subjects/{id} to update mentor subject by ID(only for MENTOR)
+- DELETE http://localhost:8080/api/mentor_subjects/{id} to delete mentor subject by ID(only for MENTOR)
 
 ### Review
+- GET http://localhost:8080/api/mentor_subject_reviews to get all mentor subject reviews
+- GET http://localhost:8080/api/mentor_subject_reviews/{id} to get mentor subject review by ID
+- POST http://localhost:8080/api/mentor_subject_reviews to create mentor subject review(only for STUDENT)
+- PUT http://localhost:8080/api/mentor_subject_reviews/{id} to update mentor subject review by ID(only for STUDENT)
+- DELETE http://localhost:8080/api/mentor_subject_reviews/{id} to delete mentor subject review by ID(only for STUDENT)
 
+### Session Request
+- GET http://localhost:8080/api/session_requests/student to get all session request for STUDENT
+- - GET http://localhost:8080/api/session_requests/mentor to get all session request for MENTOR
+- POST http://localhost:8080/api/session_requests to create session request (only for STUDENT)
+- PUT http://localhost:8080/api/session_requests/1/status to update status of session request (only for MENTOR)
 
 ## Running Tests
 
+[![temp-Image-Euo-Fi3.avif](https://i.postimg.cc/TYGyRt2L/temp-Image-Euo-Fi3.avif)](https://postimg.cc/jCgqcQ7t)
+
 ## EER Diagram
+
+[![temp-Imagebj7e-I8.avif](https://i.postimg.cc/TYGNwn19/temp-Imagebj7e-I8.avif)](https://postimg.cc/YjnzDG1G)
 
 ## Chat Flow Diagram
 
-## Class Diagram
+[![temp-Image-CZjqb-H.avif](https://i.postimg.cc/d0dGrSST/temp-Image-CZjqb-H.avif)](https://postimg.cc/QB8BrSDX)
 
 ## Contributors
 

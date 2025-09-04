@@ -1,0 +1,48 @@
+services:
+  app:
+    build:
+      context: .
+    container_name: teach_sphere_app
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ] # Health check command
+      interval: 30s # Check every 30 seconds
+      timeout: 10s # Timeout after 10 seconds
+      retries: 3 # Retry 3 times before marking as unhealthy
+      start_period: 60s
+
+  db:
+    image: mysql:8.0
+    container_name: teach_sphere_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping","-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+  redis:
+    image: redis:7
+    container_name: teach_sphere_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5

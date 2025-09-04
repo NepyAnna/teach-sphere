@@ -1,0 +1,79 @@
+package com.sheoanna.teach_sphere.subject;
+
+import com.sheoanna.teach_sphere.category.Category;
+import com.sheoanna.teach_sphere.category.CategoryService;
+import com.sheoanna.teach_sphere.subject.dtos.SubjectMapper;
+import com.sheoanna.teach_sphere.subject.dtos.SubjectRequest;
+import com.sheoanna.teach_sphere.subject.dtos.SubjectResponse;
+import com.sheoanna.teach_sphere.subject.exceptions.SubjectByNameAlreadyExistsException;
+import com.sheoanna.teach_sphere.subject.exceptions.SubjectNotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@RequiredArgsConstructor
+public class SubjectService {
+    private final SubjectRepository subjectRepository;
+    private final SubjectMapper subjectMapper;
+    private final CategoryService categoryService;
+
+    public Page<SubjectResponse> findAllSubjects(Pageable pageable) {
+        return subjectRepository.findAll(pageable).map(subjectMapper::toResponse);
+    }
+
+    public SubjectResponse findSubjectById(Long id) {
+        Subject existSubject = subjectRepository.findById(id)
+                .orElseThrow(() -> new SubjectNotFoundException(id));
+
+        return subjectMapper.toResponse(existSubject);
+    }
+
+    @Transactional
+    public SubjectResponse createSubject(SubjectRequest request) {
+        Category existCategory = categoryService.findExistCategory(request.categoryId());
+
+        checkIfSubjectExist(request.name());
+
+        Subject savedSubject = subjectRepository.save(Subject.builder()
+                .name(request.name())
+                .category(existCategory).build());
+
+        return subjectMapper.toResponse(savedSubject);
+    }
+
+    @Transactional
+    public SubjectResponse updateSubject(Long id, SubjectRequest request) {
+        Subject existSubject = subjectRepository.findById(id)
+                .orElseThrow(() -> new SubjectNotFoundException(id));
+
+        Category existCategory = categoryService.findExistCategory(request.categoryId());
+
+        existSubject.setName(request.name());
+        existSubject.setCategory(existCategory);
+
+        return subjectMapper.toResponse(existSubject);
+    }
+
+    public void deleteSubject(Long id) {
+        if (subjectRepository.findById(id).isEmpty()) {
+            throw new SubjectNotFoundException(id);
+        }
+        subjectRepository.deleteById(id);
+    }
+
+    private void checkIfSubjectExist(String name) {
+        if (subjectRepository.existsByName(name)) {
+            throw new SubjectByNameAlreadyExistsException(name);
+        }
+    }
+
+    public Subject findSubjectByIdObj(Long id) {
+        Subject existSubject = subjectRepository.findById(id)
+                .orElseThrow(() -> new SubjectNotFoundException(id));
+
+        return existSubject;
+    }
+}

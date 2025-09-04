@@ -47,6 +47,7 @@ public class MentorSubjectReviewService {
         newReview.setReviewer(user);
         newReview.setMentorSubject(existedMentorSubject);
         reviewRepository.save(newReview);
+        mentorSubjectService.updateRatingAndCount(existedMentorSubject);
 
         return reviewMapper.toResponse(newReview);
     }
@@ -65,6 +66,7 @@ public class MentorSubjectReviewService {
         existedReview.setMentorSubject(mentorSubject);
         existedReview.setCreatedAt(LocalDateTime.now());
 
+        mentorSubjectService.updateRatingAndCount(mentorSubject);
         return reviewMapper.toResponse(existedReview);
     }
 
@@ -72,10 +74,12 @@ public class MentorSubjectReviewService {
     public void deleteReview(Long id) {
         User user = userService.getAuthenticatedUser();
         MentorSubjectReview existedReview = findByIdObj(id);
+        MentorSubject mentorSubject = existedReview.getMentorSubject();
 
         checkCanModify(user, existedReview);
 
         reviewRepository.delete(existedReview);
+        mentorSubjectService.updateRatingAndCount(mentorSubject);
     }
 
     public MentorSubjectReview findByIdObj(Long id) {

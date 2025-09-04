@@ -36,9 +36,17 @@ public class MentorSubject {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Subject subject;
 
+    @Column(name = "rating")
+    private double rating;
+
+    @Column(name = "review_count")
+    private int reviewCount;
+
     @OneToMany(mappedBy = "mentorSubject", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<MentorSubjectReview> reviews = new ArrayList<>();
 
     @OneToMany(mappedBy = "mentorSubject", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<SessionRequest> sessionRequests = new ArrayList<>();
 }

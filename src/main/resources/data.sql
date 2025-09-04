@@ -30,11 +30,11 @@ INSERT INTO profiles (avatar_url, bio, location, photo_public_id, user_id) VALUE
 ('/images/default-profile.jpg', 'Aspiring programmer', 'Odessa', 'avatar3_pubid', 3);
 
 -- Mentor Subjects
-INSERT INTO mentor_subjects (user_id, subject_id) VALUES (2, 1);
-INSERT INTO mentor_subjects (user_id, subject_id) VALUES (2, 2);
-INSERT INTO mentor_subjects (user_id, subject_id) VALUES (2, 3);
-INSERT INTO mentor_subjects (user_id, subject_id) VALUES (2, 4);
-INSERT INTO mentor_subjects (user_id, subject_id) VALUES (2, 5);
+INSERT INTO mentor_subjects (user_id, subject_id, rating, review_count) VALUES (2, 1, 4.0, 1);
+INSERT INTO mentor_subjects (user_id, subject_id, rating, review_count) VALUES (2, 2, 3.0, 1);
+INSERT INTO mentor_subjects (user_id, subject_id, rating, review_count) VALUES (2, 3, 5.0, 1);
+INSERT INTO mentor_subjects (user_id, subject_id, rating, review_count) VALUES (2, 4, 4.0, 1);
+INSERT INTO mentor_subjects (user_id, subject_id, rating, review_count) VALUES (2, 5, 5.0, 1);
 
 -- Mentor Subject Review
 INSERT INTO mentor_subjects_reviews (rating, body, created_at, mentor_subject_id, user_id) VALUES

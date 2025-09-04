@@ -8,9 +8,10 @@ import com.sheoanna.teach_sphere.category.CategoryService;
 import com.sheoanna.teach_sphere.subject.dtos.SubjectMapper;
 import com.sheoanna.teach_sphere.subject.dtos.SubjectRequest;
 import com.sheoanna.teach_sphere.subject.dtos.SubjectResponse;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +21,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class SubjectServiceTest {
     @Mock
     private SubjectRepository subjectRepository;
@@ -40,7 +42,6 @@ class SubjectServiceTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
         category = Category.builder().id(1L).name("Math").build();
         subject = Subject.builder().id(1L).name("Algebra").category(category).build();
         subjectRequest = new SubjectRequest("Algebra", 1L);

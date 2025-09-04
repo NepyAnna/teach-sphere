@@ -4,6 +4,7 @@ import com.sheoanna.teach_sphere.mentor_subject.dtos.MentorSubjectMapper;
 import com.sheoanna.teach_sphere.mentor_subject.dtos.MentorSubjectRequest;
 import com.sheoanna.teach_sphere.mentor_subject.dtos.MentorSubjectResponse;
 import com.sheoanna.teach_sphere.mentor_subject.exceptions.MentorSubjectNotFoundException;
+import com.sheoanna.teach_sphere.review.MentorSubjectReview;
 import com.sheoanna.teach_sphere.subject.Subject;
 import com.sheoanna.teach_sphere.subject.SubjectService;
 import com.sheoanna.teach_sphere.user.Role;
@@ -15,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -79,5 +82,21 @@ public class MentorSubjectService {
     public MentorSubject findByIdObj(Long id){
         return  mentorSubjectRepository.findById(id)
                 .orElseThrow(() -> new MentorSubjectNotFoundException(id));
+    }
+
+    @Transactional
+    public void updateRatingAndCount(MentorSubject mentorSubject) {
+        List<MentorSubjectReview> reviews = mentorSubject.getReviews();
+
+        int count = reviews.size();
+        double avgRating = reviews.stream()
+                .mapToDouble(MentorSubjectReview::getRating)
+                .average()
+                .orElse(0.0);
+
+        mentorSubject.setReviewCount(count);
+        mentorSubject.setRating(avgRating);
+
+        mentorSubjectRepository.save(mentorSubject);
     }
 }

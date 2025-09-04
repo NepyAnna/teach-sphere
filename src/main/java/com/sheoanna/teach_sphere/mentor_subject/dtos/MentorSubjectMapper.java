@@ -8,6 +8,8 @@ public class MentorSubjectMapper {
     public MentorSubjectResponse toResponse(MentorSubject mentorSubject){
         return new MentorSubjectResponse(mentorSubject.getId(),
                 mentorSubject.getMentor().getUsername(),
-                mentorSubject.getSubject().getName());
+                mentorSubject.getSubject().getName(),
+                mentorSubject.getRating(),
+                mentorSubject.getReviewCount());
     }
 }

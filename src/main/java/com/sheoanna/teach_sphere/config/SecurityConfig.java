@@ -58,7 +58,7 @@ public class SecurityConfig {
                         auth
                                 .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/refresh")
                                 .permitAll()
-                                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/health","/actuator/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/users", "/api/profiles")
                                 .hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.POST, "/api/categories", "/api/categories/**", "api/subjects", "api/subjects/**")

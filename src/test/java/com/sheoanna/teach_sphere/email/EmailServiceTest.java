@@ -41,22 +41,4 @@ class EmailServiceTest {
         verify(templateEngine).process(eq("registration-email"), any(Context.class));
         verify(mailSender).send(mimeMessage);
     }
-
-   /* @Test
-    void sendHtmlEmail_whenMailSenderThrows_shouldNotThrow() throws Exception {
-        String to = "test@example.com";
-        String subject = "Test Subject";
-        String html = "<html></html>";
-
-        MimeMessage mimeMessage = mock(MimeMessage.class);
-        when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
-        doThrow(new RuntimeException("SMTP error")).when(mailSender).send(mimeMessage);
-
-        // виклик методу приватного sendHtmlEmail через рефлексію або тест через public метод
-        // тут ми тестуємо sendRegistrationEmail, яка викликає sendHtmlEmail
-        emailService.sendRegistrationEmail(to, "user123");
-
-        // перевіряємо що mailSender.send викликалося
-        verify(mailSender).send(mimeMessage);
-    }*/
 }

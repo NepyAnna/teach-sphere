@@ -1,10 +1,6 @@
 package com.sheoanna.teach_sphere.email;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import com.sheoanna.teach_sphere.email.EmailService;
 import jakarta.mail.internet.MimeMessage;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;

@@ -56,6 +56,14 @@ docker-compose up -d --build
 ```bash
 docker-compose down --volumes --remove-orphans
 ```
+
+### Clone from DockerHub 
+
+```bash
+docker pull sheoanna/teach-sphere-app:latest
+docker compose up -d --build
+```
+
 ## API Endpoints
 
 ### Registration / Login
@@ -106,8 +114,14 @@ docker-compose down --volumes --remove-orphans
 - DELETE http://localhost:8080/api/mentor_subject_reviews/{id} to delete mentor subject review by ID(only for STUDENT)
 
 ### Session Request
+- GET http://localhost:8080/api/session_requests/student to get all session request for STUDENT
+- - GET http://localhost:8080/api/session_requests/mentor to get all session request for MENTOR
+- POST http://localhost:8080/api/session_requests to create session request (only for STUDENT)
+- PUT http://localhost:8080/api/session_requests/1/status to update status of session request (only for MENTOR)
 
 ## Running Tests
+
+[![temp-Image-Euo-Fi3.avif](https://i.postimg.cc/TYGyRt2L/temp-Image-Euo-Fi3.avif)](https://postimg.cc/jCgqcQ7t)
 
 ## EER Diagram
 

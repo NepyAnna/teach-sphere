@@ -20,7 +20,7 @@ public class HealthController {
     public ResponseEntity<Map<String, Object>> health() {
         Map<String, Object> response = new HashMap<>();
         response.put("status", "UP");
-        response.put("application", "DreamRoute");
+        response.put("application", "Teach Sphere");
 
         try (Connection connection = dataSource.getConnection()) {
             if (connection.isValid(5)) {

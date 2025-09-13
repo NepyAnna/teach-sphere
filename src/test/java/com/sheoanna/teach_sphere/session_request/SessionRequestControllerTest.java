@@ -37,10 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class SessionRequestControllerTest {
 
     @Container
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(DockerImageName.parse("postgres:15-alpine"))
-            .withDatabaseName("test_teach_db")
-            .withUsername("testuser")
-            .withPassword("testpass");
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(DockerImageName.parse("postgres:15-alpine"));
 
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry) {

@@ -2,7 +2,7 @@ services:
   app:
     build:
       context: .
-    container_name: teach_sphere_app
+    container_name: teach-sphere-app
     ports:
       - "8080:8080"
     env_file:
@@ -21,7 +21,7 @@ services:
 
   db:
     image: mysql:8.0
-    container_name: teach_sphere_db
+    container_name: teach-sphere-db
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -37,7 +37,7 @@ services:
       retries: 20
   redis:
     image: redis:7
-    container_name: teach_sphere_redis
+    container_name: teach-sphere-redis
     restart: always
     ports:
       - "6379:6379"

@@ -45,7 +45,12 @@ It supports both access and refresh tokens, with an additional mechanism to inva
 git clone https://github.com/NepyAnna/teach-sphere.git
 cd teach-sphere
 ```
-### Run
+### Clone from DockerHub
+```bash
+docker pull sheoanna/teach-sphere-app:v1
+```
+
+### Run project in container 
 - In order to run the project you need to fill in all the variables in the .env file as specified in .env.example. and also docker must be installed and running
 
 ```bash
@@ -56,13 +61,13 @@ docker-compose up -d --build
 ```bash
 docker-compose down --volumes --remove-orphans
 ```
-
-### Clone from DockerHub 
+### Run tests in container
 
 ```bash
-docker pull sheoanna/teach-sphere-app:latest
-docker compose up -d --build
+docker-compose -f docker-compose-test.yml run --rm teach-sphere-test ./mvnw test 
 ```
+- You should see :
+  [![temp-Image-HTqz-G1.avif](https://i.postimg.cc/hPgz2mmn/temp-Image-HTqz-G1.avif)](https://postimg.cc/jCgS5Lv3)
 
 ## API Endpoints
 

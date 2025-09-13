@@ -28,10 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class SubjectControllerTest {
 
     @Container
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15-alpine")
-            .withDatabaseName("test_teach_db")
-            .withUsername("testuser")
-            .withPassword("testpass");
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15-alpine");
 
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry) {

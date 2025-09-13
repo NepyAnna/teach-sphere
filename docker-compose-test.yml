@@ -5,6 +5,7 @@ services:
       dockerfile: Dockerfile-test
     container_name: teach-sphere-test
     environment:
+      TESTCONTAINERS_HOST_OVERRIDE: host.docker.internal
       SPRING_PROFILES_ACTIVE: test
       DOCKER_HOST: unix:///var/run/docker.sock
       TESTCONTAINERS_RYUK_DISABLED: "true"

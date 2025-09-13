@@ -1,0 +1,9 @@
+# ---- Stage 1: Build and test the application ----
+FROM maven:3.9.11-eclipse-temurin-21 AS test
+WORKDIR /app
+# Copy the source code
+COPY . .
+#  Download dependencies
+RUN ./mvnw dependency:go-offline
+# Run tests of app
+CMD ["./mvnw", "clean", "verify", "-e", "-X"]

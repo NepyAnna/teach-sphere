@@ -1,0 +1,12 @@
+services:
+  teach-sphere-test:
+    build:
+      context: .
+      dockerfile: Dockerfile-test
+    container_name: teach-sphere-test
+    environment:
+      SPRING_PROFILES_ACTIVE: test
+      DOCKER_HOST: unix:///var/run/docker.sock
+      TESTCONTAINERS_RYUK_DISABLED: "true"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

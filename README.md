@@ -69,6 +69,21 @@ docker-compose -f docker-compose-test.yml run --rm teach-sphere-test ./mvnw test
 - You should see :
   [![temp-Image-HTqz-G1.avif](https://i.postimg.cc/hPgz2mmn/temp-Image-HTqz-G1.avif)](https://postimg.cc/jCgS5Lv3)
 
+## CI/CD with GitHub Actions
+This project uses GitHub Actions to automate the software lifecycle: testing, building, and releasing Docker images.
+
+#### Workflows
+We created three separate workflows inside .github/workflows/:
+* test.yml – Runs automated tests on pull requests before merging into main.
+* build.yml – Builds and pushes Docker images to Docker Hub whenever new code is pushed to the main branch.
+* release.yml – Creates production-ready Docker images and tags them when a version tag (e.g., v1.0.0) is pushed.
+
+#### Execution
+* Test workflow: triggered automatically on every Pull Request → main.
+* Build workflow: triggered automatically on every push to main.
+* Release workflow: triggered automatically when a tag starting with v is pushed (e.g., git tag v1.0.0 && git push origin v1.0.0).
+  Screenshots of each workflow execution can be found in the Actions tab of this repository.
+
 ## API Endpoints
 
 ### Registration / Login

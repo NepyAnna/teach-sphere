@@ -6,7 +6,7 @@ services:
     container_name: teach-sphere-test
     environment:
       SERVER_PORT: 8080
-#      TESTCONTAINERS_HOST_OVERRIDE: host.docker.internal
+      TESTCONTAINERS_HOST_OVERRIDE: host.docker.internal
       SPRING_PROFILES_ACTIVE: test
       DOCKER_HOST: unix:///var/run/docker.sock
       TESTCONTAINERS_RYUK_DISABLED: "true"

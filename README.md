@@ -45,6 +45,7 @@ It supports both access and refresh tokens, with an additional mechanism to inva
 git clone https://github.com/NepyAnna/teach-sphere.git
 cd teach-sphere
 ```
+
 ### Clone from DockerHub
 ```bash
 docker pull sheoanna/teach-sphere-app:v1
@@ -67,6 +68,7 @@ docker-compose down --volumes --remove-orphans
 docker-compose -f docker-compose-test.yml run --rm teach-sphere-test ./mvnw test 
 ```
 - You should see :
+- 
   [![temp-Image-HTqz-G1.avif](https://i.postimg.cc/hPgz2mmn/temp-Image-HTqz-G1.avif)](https://postimg.cc/jCgS5Lv3)
 
 ## CI/CD with GitHub Actions
@@ -152,6 +154,7 @@ Screenshots of each workflow execution can be found in the Actions tab of this r
 [![temp-Image-CZjqb-H.avif](https://i.postimg.cc/d0dGrSST/temp-Image-CZjqb-H.avif)](https://postimg.cc/QB8BrSDX)
 
 ## Contributors
+
 Anna Nepyivoda
     <a href="https://github.com/NepyAnna">
         <picture>

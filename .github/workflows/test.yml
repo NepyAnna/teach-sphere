@@ -5,7 +5,8 @@ on:
 jobs:
   test-docker:
     runs-on: ubuntu-latest
-    env:
+    env:env:
+      SERVER_PORT: 8080
       TESTCONTAINERS_HOST_OVERRIDE: ""
     steps:
       - uses: actions/checkout@v4

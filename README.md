@@ -39,7 +39,6 @@ It supports both access and refresh tokens, with an additional mechanism to inva
 ![Swagger](https://img.shields.io/badge/swagger-%2385EA2D.svg?style=for-the-badge&logo=swagger&logoColor=black)
 
 ## Clone the Repository
-
 ```bash
 git clone https://github.com/NepyAnna/teach-sphere.git
 cd teach-sphere

@@ -7,7 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SERVER_PORT: 8080
-      rsaPrivateKey: ${{ secrets.RSAPRIVATEKEY }}
       TESTCONTAINERS_HOST_OVERRIDE: ""
     steps:
       - uses: actions/checkout@v4

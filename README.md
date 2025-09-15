@@ -152,6 +152,7 @@ Screenshots of each workflow execution can be found in the Actions tab of this r
 [![temp-Image-CZjqb-H.avif](https://i.postimg.cc/d0dGrSST/temp-Image-CZjqb-H.avif)](https://postimg.cc/QB8BrSDX)
 
 ## Contributors
+
 Anna Nepyivoda
     <a href="https://github.com/NepyAnna">
         <picture>

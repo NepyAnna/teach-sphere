@@ -6,6 +6,8 @@ on:
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
+    env:
+      TESTCONTAINERS_HOST_OVERRIDE: ""
     steps:
       - uses: actions/checkout@v4
       - name: Set up Docker Buildx

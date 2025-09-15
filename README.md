@@ -5,7 +5,6 @@ The platform includes key features such as secure authentication using JWT, role
 The backend is built with Spring Boot, following best development practices, a modular architecture, automated testing, and modern tools like Docker for containerization, GitHub Actions for CI/CD, and Cloudinary for image management.
 
 ## Main Feature
-
 ### Authentication & Authorization with Asymmetric Keys and Redis Blacklist
 
 This project implements secure JWT-based authentication and authorization using RSA asymmetric keys for signing and verifying tokens.

@@ -82,7 +82,7 @@ We created three separate workflows inside .github/workflows/:
 * Test workflow: triggered automatically on every Pull Request → main.
 * Build workflow: triggered automatically on every push to main.
 * Release workflow: triggered automatically when a tag starting with v is pushed (e.g., git tag v1.0.0 && git push origin v1.0.0).
-  Screenshots of each workflow execution can be found in the Actions tab of this repository.
+Screenshots of each workflow execution can be found in the Actions tab of this repository.
 
 ## API Endpoints
 
@@ -152,7 +152,6 @@ We created three separate workflows inside .github/workflows/:
 [![temp-Image-CZjqb-H.avif](https://i.postimg.cc/d0dGrSST/temp-Image-CZjqb-H.avif)](https://postimg.cc/QB8BrSDX)
 
 ## Contributors
-
 Anna Nepyivoda
     <a href="https://github.com/NepyAnna">
         <picture>

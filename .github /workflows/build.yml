@@ -31,8 +31,8 @@ jobs:
         with:
           images: ${{ secrets.DOCKER_USERNAME }}/teach-sphere-app
           tags: |
-            type=ref,event=branch    # Tag with branch name (e.g., main)
-            type=sha,prefix=sha-     # Tag with commit SHA (e.g., sha-abc123)
+            type=ref,event=branch
+            type=sha,prefix=sha-
       # Step 5: Build and push the Docker image
       # Uses GitHub Actions cache for faster subsequent builds
       - name: Build and push Docker image

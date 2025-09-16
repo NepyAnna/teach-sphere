@@ -12,7 +12,7 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class CloudinaryService {
-    @Value("${DEFAULT_PROFILE_IMAGE}")
+    @Value("${profile.default-image}")
     private String defaultProfileImageUrl;
     private final Cloudinary cloudinary;
 

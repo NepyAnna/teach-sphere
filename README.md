@@ -5,6 +5,7 @@ The platform includes key features such as secure authentication using JWT, role
 The backend is built with Spring Boot, following best development practices, a modular architecture, automated testing, and modern tools like Docker for containerization, GitHub Actions for CI/CD, and Cloudinary for image management.
 
 ## Main Feature
+
 ### Authentication & Authorization with Asymmetric Keys and Redis Blacklist
 
 This project implements secure JWT-based authentication and authorization using RSA asymmetric keys for signing and verifying tokens.
@@ -16,17 +17,20 @@ It supports both access and refresh tokens, with an additional mechanism to inva
 - Token Blacklisting — When a user logs out or a refresh token is rotated, the old token is stored in Redis with a TTL equal to its remaining lifetime.
 
 ##### Redis as a Blacklist Store:
+
 - Fast lookups: Redis is in-memory, enabling O(1) checks for token invalidation.
 - Automatic expiration: Tokens are stored with a TTL, so expired entries are removed automatically, avoiding manual cleanup.
 - Distributed environment friendly: Works seamlessly in multi-instance deployments where in-memory maps wouldn’t sync across nodes.
 
 ##### Flow:
+
 - Login — User provides credentials → Server issues access & refresh tokens.
 - Requests — Access token is sent via Authorization: Bearer <token> header and validated against RSA public key + Redis blacklist check.
 - Refresh — Refresh token rotates a new pair of tokens, invalidating the old refresh token in Redis.
 - Logout — Both access and refresh tokens are blacklisted in Redis until they expire.
 
 ## Technologies Used
+
 ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
 ![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
 ![Apache Maven](https://img.shields.io/badge/Apache%20Maven-C71A36?style=for-the-badge&logo=Apache%20Maven&logoColor=white)
@@ -39,17 +43,20 @@ It supports both access and refresh tokens, with an additional mechanism to inva
 ![Swagger](https://img.shields.io/badge/swagger-%2385EA2D.svg?style=for-the-badge&logo=swagger&logoColor=black)
 
 ## Clone the Repository
+
 ```bash
 git clone https://github.com/NepyAnna/teach-sphere.git
 cd teach-sphere
 ```
 
 ### Clone from DockerHub
+
 ```bash
 docker pull sheoanna/teach-sphere-app:v1
 ```
 
-### Run project in container 
+### Run project in container
+
 - In order to run the project you need to fill in all the variables in the .env file as specified in .env.example. and also docker must be installed and running
 
 ```bash
@@ -70,15 +77,18 @@ docker-compose -f docker-compose-test.yml run --rm teach-sphere-test ./mvnw test
   [![temp-Image-HTqz-G1.avif](https://i.postimg.cc/hPgz2mmn/temp-Image-HTqz-G1.avif)](https://postimg.cc/jCgS5Lv3)
 
 ## CI/CD with GitHub Actions
+
 This project uses GitHub Actions to automate the software lifecycle: testing, building, and releasing Docker images.
 
 #### Workflows
+
 We created three separate workflows inside .github/workflows/:
 * test.yml – Runs automated tests on pull requests before merging into main.
 * build.yml – Builds and pushes Docker images to Docker Hub whenever new code is pushed to the main branch.
 * release.yml – Creates production-ready Docker images and tags them when a version tag (e.g., v1.0.0) is pushed.
 
 #### Execution
+
 * Test workflow: triggered automatically on every Pull Request → main.
 * Build workflow: triggered automatically on every push to main.
 * Release workflow: triggered automatically when a tag starting with v is pushed (e.g., git tag v1.0.0 && git push origin v1.0.0).

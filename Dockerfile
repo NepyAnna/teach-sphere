@@ -15,9 +15,4 @@ COPY wait-for-postgres.sh /wait-for-postgres.sh
 RUN chmod +x /wait-for-postgres.sh
 EXPOSE 8080
 
-ENTRYPOINT ["/wait-for-postgres.sh", "java", "-jar", "app.jar"]
-
-#ENTRYPOINT ["java", "-jar", "app.jar"]
-#COPY wait-for-postgres.sh /wait-for-postgres.sh
-#ENTRYPOINT ["/wait-for-postgres.sh"]
-#CMD ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]

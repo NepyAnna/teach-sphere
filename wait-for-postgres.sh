@@ -1,22 +1,16 @@
 #!/bin/bash
+# --- PostgreSQL ---
+PGHOST="${POSTGRES_HOST}"
 
 POSTGRES_USER="${POSTGRES_USER}"
-POSTGRES_PASSWORD="${POSTGRES_PASSWORD}"
+PGPASSWORD="${POSTGRES_PASSWORD}"
 POSTGRES_DB="${POSTGRES_DB}"
-POSTGRES_HOST="${POSTGRES_HOST}"
 POSTGRES_PORT="${POSTGRES_PORT}"
 
-pass=POSTGRES_PASSWORD
-db=POSTGRES_DB
-host=POSTGRES_HOST
-port=POSTGRES_PORT
-
-export PGPASSWORD="$pass"
-
-echo "Waiting for PostgreSQL to be available at $host:$port/$db for user $user..."
+echo "Waiting for PostgreSQL to be available at $PGHOST:$POSTGRES_PORT/$POSTGRES_DB for user $POSTGRES_USER..."
 
 i=0
-until pg_isready -h "$host" -p "$port" -U "$user" -d "$db"; do
+until pg_isready -h "$PGHOST" -p "$POSTGRES_PORT" -U "$POSTGRES_USER" -d "$POSTGRES_DB"; do
   i=$((i+1))
   if [ $i -ge 30 ]; then
     echo "PostgreSQL is still unreachable after 30 attempts. Exiting."

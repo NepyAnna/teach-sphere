@@ -1,17 +1,24 @@
-#!/bin/sh
+#!/bin/bash
 
-# Accept DATABASE_URL from env (as in Render)
 DATABASE_URL="${DATABASE_URL}"
 
-# Parse connection details from DATABASE_URL (bash only, not POSIX sh)
-proto="$(echo $DATABASE_URL | sed -n 's,^\(.*\)://.*,\1,p')"
-user="$(echo $DATABASE_URL | sed -n 's,.*//\([^:]*\):.*@.*,\1,p')"
-pass="$(echo $DATABASE_URL | sed -n 's,.*//[^:]*:\([^@]*\)@.*,\1,p')"
-host="$(echo $DATABASE_URL | sed -n 's,.*@\(.*\)/.*,\1,p')"
-db="$(echo $DATABASE_URL | sed -n 's,.*/\([^?]*\).*,\1,p')"
+# Прибираємо протокол, ділимо на user:pass@host:port/db
+proto_removed="${DATABASE_URL#*://}"
 
-# Set default port
-port=5432
+user="${proto_removed%%:*}"
+rest="${proto_removed#*:}"
+pass="${rest%%@*}"
+rest="${rest#*@}"
+host_port="${rest%%/*}"
+db="${rest#*/}"
+
+# host та port
+host="${host_port%%:*}"
+port="${host_port##*:}"
+
+if [ "$host" = "$port" ]; then
+  port="5432"
+fi
 
 export PGPASSWORD="$pass"
 

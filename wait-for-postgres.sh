@@ -7,7 +7,8 @@ pass="jZpu4D1INu1n6hxLjgQcndehiMdx1AV5"
 db="teach_sphere"
 
 # host та port
-host="dpg-d3o1tjre5dus73ac3iig-a.frankfurt-postgres.render.com"
+#host="dpg-d3o1tjre5dus73ac3iig-a.frankfurt-postgres.render.com"
+host="dpg-d3o1tjre5dus73ac3iig-a"
 port="5432"
 
 export PGPASSWORD="$pass"

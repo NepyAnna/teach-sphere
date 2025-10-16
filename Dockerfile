@@ -8,4 +8,7 @@ RUN ./mvnw package -DskipTests -B
 FROM eclipse-temurin:21-jre
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
-ENTRYPOINT ["java", "-jar", "app.jar"]
+#ENTRYPOINT ["java", "-jar", "app.jar"]
+COPY wait-for-redis.sh /wait-for-redis.sh
+ENTRYPOINT ["/wait-for-redis.sh"]
+CMD ["java", "-jar", "app.jar"]

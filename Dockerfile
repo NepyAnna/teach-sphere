@@ -5,11 +5,11 @@ COPY .mvn .mvn
 RUN ./mvnw dependency:go-offline -B
 COPY src ./src
 RUN ./mvnw package -DskipTests -B
+
 FROM eclipse-temurin:21-jre
-WORKDIR /app
 USER root
 RUN apt-get update && apt-get install -y postgresql-client && rm -rf /var/lib/apt/lists/*
-USER app
+
 COPY --from=build /app/target/*.jar app.jar
 #ENTRYPOINT ["java", "-jar", "app.jar"]
 #COPY wait-for-redis.sh /wait-for-redis.sh

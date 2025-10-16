@@ -1,15 +1,15 @@
 #!/bin/bash
 
-DATABASE_URL="${DATABASE_URL}"
+POSTGRES_USER="${POSTGRES_USER}"
+POSTGRES_PASSWORD="${POSTGRES_PASSWORD}"
+POSTGRES_DB="${POSTGRES_DB}"
+POSTGRES_HOST="${POSTGRES_HOST}"
+POSTGRES_PORT="${POSTGRES_PORT}"
 
-user="teach_sphere"
-pass="jZpu4D1INu1n6hxLjgQcndehiMdx1AV5"
-db="teach_sphere"
-
-# host та port
-#host="dpg-d3o1tjre5dus73ac3iig-a.frankfurt-postgres.render.com"
-host="dpg-d3o1tjre5dus73ac3iig-a"
-port="5432"
+pass=POSTGRES_PASSWORD
+db=POSTGRES_DB
+host=POSTGRES_HOST
+port=POSTGRES_PORT
 
 export PGPASSWORD="$pass"
 

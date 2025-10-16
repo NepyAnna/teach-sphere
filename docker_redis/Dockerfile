@@ -1,18 +1,15 @@
-# Use official Redis 7 image
+# Базовий образ Redis
 FROM redis:7
 
-# Set container name (Render ignores this, but we keep it for local clarity)
-LABEL name="teach-sphere-redis"
+# Встановлюємо curl (для healthcheck) і netcat для псевдо-вебсерверу
+RUN apt-get update && apt-get install -y netcat curl && rm -rf /var/lib/apt/lists/*
 
-# Expose default Redis port
-EXPOSE 6379
+# Експортуємо порти
+EXPOSE 6379 8080
 
-# Optional: create data volume for persistence
-VOLUME ["/data"]
-
-# Add healthcheck (same as in your docker-compose)
+# Healthcheck — для Redis
 HEALTHCHECK --interval=5s --timeout=3s --retries=5 \
   CMD redis-cli ping || exit 1
 
-# Start Redis server
-CMD ["redis-server"]
+# Запускаємо Redis і псевдо-HTTP-сервер паралельно
+CMD redis-server & while true; do { echo -e "HTTP/1.1 200 OK\r\n\r\nOK"; } | nc -l -p 8080 -q 1; done

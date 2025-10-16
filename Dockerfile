@@ -7,6 +7,7 @@ COPY src ./src
 RUN ./mvnw package -DskipTests -B
 FROM eclipse-temurin:21-jre
 WORKDIR /app
+RUN apt-get update && apt-get install -y postgresql-client && rm -rf /var/lib/apt/lists/*
 COPY --from=build /app/target/*.jar app.jar
 #ENTRYPOINT ["java", "-jar", "app.jar"]
 #COPY wait-for-redis.sh /wait-for-redis.sh

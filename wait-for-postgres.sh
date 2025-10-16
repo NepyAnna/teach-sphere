@@ -2,23 +2,13 @@
 
 DATABASE_URL="${DATABASE_URL}"
 
-# Прибираємо протокол, ділимо на user:pass@host:port/db
-proto_removed="${DATABASE_URL#*://}"
-
-user="${proto_removed%%:*}"
-rest="${proto_removed#*:}"
-pass="${rest%%@*}"
-rest="${rest#*@}"
-host_port="${rest%%/*}"
-db="${rest#*/}"
+user="teach_sphere"
+pass="jZpu4D1INu1n6hxLjgQcndehiMdx1AV5"
+db="teach_sphere"
 
 # host та port
-host="${host_port%%:*}"
-port="${host_port##*:}"
-
-if [ "$host" = "$port" ]; then
-  port="5432"
-fi
+host="dpg-d3o1tjre5dus73ac3iig-a.frankfurt-postgres.render.com"
+port="5432"
 
 export PGPASSWORD="$pass"
 

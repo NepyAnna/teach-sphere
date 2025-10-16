@@ -1,17 +1,24 @@
 #!/bin/sh
 
-PGHOST="${POSTGRES_HOST}"
-PGPORT="${POSTGRES_PORT}"
-PGUSER="${POSTGRES_USER}"
-PGPASSWORD="${POSTGRES_PASSWORD}"
-PGDATABASE="${POSTGRES_DB}"
+# Accept DATABASE_URL from env (as in Render)
+DATABASE_URL="${DATABASE_URL}"
 
-export PGPASSWORD
+# Parse connection details from DATABASE_URL (bash only, not POSIX sh)
+proto="$(echo $DATABASE_URL | sed -n 's,^\(.*\)://.*,\1,p')"
+user="$(echo $DATABASE_URL | sed -n 's,.*//\([^:]*\):.*@.*,\1,p')"
+pass="$(echo $DATABASE_URL | sed -n 's,.*//[^:]*:\([^@]*\)@.*,\1,p')"
+host="$(echo $DATABASE_URL | sed -n 's,.*@\(.*\)/.*,\1,p')"
+db="$(echo $DATABASE_URL | sed -n 's,.*/\([^?]*\).*,\1,p')"
 
-echo "Waiting for PostgreSQL to be available at $PGHOST:$PGPORT/$PGDATABASE..."
+# Set default port
+port=5432
+
+export PGPASSWORD="$pass"
+
+echo "Waiting for PostgreSQL to be available at $host:$port/$db for user $user..."
 
 i=0
-until pg_isready -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d "$PGDATABASE"; do
+until pg_isready -h "$host" -p "$port" -U "$user" -d "$db"; do
   i=$((i+1))
   if [ $i -ge 30 ]; then
     echo "PostgreSQL is still unreachable after 30 attempts. Exiting."

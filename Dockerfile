@@ -12,13 +12,6 @@ RUN apt-get update && apt-get install -y postgresql-client && rm -rf /var/lib/ap
 
 COPY --from=build /app/target/*.jar app.jar
 #ENTRYPOINT ["java", "-jar", "app.jar"]
-#COPY wait-for-redis.sh /wait-for-redis.sh
-#ENTRYPOINT ["/wait-for-redis.sh"]
-#CMD ["java", "-jar", "app.jar"]
 COPY wait-for-postgres.sh /wait-for-postgres.sh
 ENTRYPOINT ["/wait-for-postgres.sh"]
 CMD ["java", "-jar", "app.jar"]
-#COPY wait-for-services.sh /wait-for-services.sh
-#RUN chmod +x /wait-for-services.sh
-#ENTRYPOINT ["/wait-for-services.sh"]
-#CMD ["java", "-jar", "app.jar"]

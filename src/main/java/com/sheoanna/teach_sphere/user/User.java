@@ -39,6 +39,7 @@ public class User {
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
+    @Builder.Default
     private Set<Role> roles = new HashSet<>();
 
     @OneToOne(mappedBy = "user")
@@ -46,8 +47,10 @@ public class User {
 
     @OneToMany(mappedBy = "mentor")
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @Builder.Default
     private List<MentorSubject> mentorSubjects = new ArrayList<>();
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<SessionRequest> sentRequests = new ArrayList<>();
 }

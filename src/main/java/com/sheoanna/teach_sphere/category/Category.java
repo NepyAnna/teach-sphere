@@ -25,5 +25,6 @@ public class Category {
 
     @OneToMany(mappedBy = "category")
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @Builder.Default
     private Set<Subject> subjects = new HashSet<>();
 }
